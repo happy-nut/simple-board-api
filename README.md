@@ -24,3 +24,29 @@ DB는 RDB/NoSQL 어떤 것을 이용해도 됩니다. firebase처럼 serverless 
 6. 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
 7. 특정 Post에 달린 Comment를 조회할 수 있어야 하며, 페이지네이션이 가능하여야 합니다.
 8. Post와 Comment는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
+
+## Prerequisite
+
+1. MySQL 설치
+
+```bash
+brew install mysql@5.7
+```
+
+2. MySQL 실행
+
+```bash
+brew services start mysql
+```
+
+3. `setUpDatabase.sql` SQL 실행
+
+```bash
+mysql -u root -p < ./scripts/setUpDatabase.sql
+```
+
+## Run test
+
+```bash
+yarn test
+```

@@ -1,0 +1,9 @@
+typeorm:
+  name: default
+  type: mysql
+  host: localhost
+  port: 3306
+  username: simple_board_test
+  password: Mm6SkgR7wFl42s$I
+  database: simple_board_test
+  synchronize: true
