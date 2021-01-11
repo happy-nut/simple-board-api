@@ -2,34 +2,36 @@ import { User } from './User'
 import { UserId } from './UserId'
 
 describe('User', () => {
-  it('creates a user without ID', () => {
-    const name = 'test-name'
-    const registeredAt = new Date()
-    const props = {
-      name,
-      registeredAt
-    }
+  describe('.create', () => {
+    it('creates a user with ID', () => {
+      const name = 'test-name'
+      const registeredAt = new Date()
+      const props = {
+        name,
+        registeredAt
+      }
+      const id = new UserId()
 
-    const uut = User.create(props)
+      const uut = User.create(props, id)
 
-    expect(uut.id.value).toBeString()
-    expect(uut.name).toBe(name)
-    expect(uut.registeredAt).toEqual<Date>(registeredAt)
+      expect(uut.id.equals(id)).toBeTrue()
+      expect(uut.name).toBe(name)
+      expect(uut.registeredAt).toEqual<Date>(registeredAt)
+    })
   })
 
-  it('creates a user with ID', () => {
-    const name = 'test-name'
-    const registeredAt = new Date()
-    const props = {
-      name,
-      registeredAt
-    }
-    const id = new UserId()
+  describe('.createNew', () => {
+    it('creates a user', () => {
+      const name = 'test-name'
+      const props = {
+        name
+      }
 
-    const uut = User.create(props, id)
+      const uut = User.createNew(props)
 
-    expect(uut.id.equals(id)).toBeTrue()
-    expect(uut.name).toBe(name)
-    expect(uut.registeredAt).toEqual<Date>(registeredAt)
+      expect(uut.id.value).toBeString()
+      expect(uut.name).toBe(name)
+      expect(uut.registeredAt).toBeInstanceOf(Date)
+    })
   })
 })

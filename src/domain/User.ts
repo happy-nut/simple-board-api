@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { AggregateRoot } from '../shared/ddd'
 import { UserId } from './UserId'
 
@@ -7,13 +6,23 @@ interface Props {
   registeredAt: Date
 }
 
-export class User extends AggregateRoot<Props> {
-  static create (props: Props, id?: UserId): User {
-    if (_.isNil(id)) {
-      return new User({ ...props }, new UserId())
-    }
+interface CreateNewProps {
+  name: string
+}
 
+export class User extends AggregateRoot<Props> {
+  static create (props: Props, id: UserId): User {
     return new User({ ...props }, id)
+  }
+
+  static createNew (props: CreateNewProps): User {
+    return new User(
+      {
+        ...props,
+        registeredAt: new Date()
+      },
+      new UserId()
+    )
   }
 
   get name (): string {
