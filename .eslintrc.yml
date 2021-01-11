@@ -23,3 +23,6 @@ rules:
   space-before-function-paren:
     - 2
     - always
+  eol-last:
+    - 2
+    - always
