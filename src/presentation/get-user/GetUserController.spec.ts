@@ -1,28 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import request from 'supertest'
 import { HttpStatus, INestApplication, Logger } from '@nestjs/common'
-import {
-  CreateUserError,
-  CreateUserResponse,
-  CreateUserUseCase
-} from '../../application/create-user'
 import { mock, MockProxy } from 'jest-mock-extended'
 import { UserId } from '../../domain/UserId'
-import { CreateUserBody, CreateUserController } from './CreateUserController'
+import { GetUserController } from './GetUserController'
+import { GetUserError, GetUserResponse, GetUserUseCase } from '../../application/get-user'
 
 describe('CreateUserController', () => {
   let testingModule: TestingModule
   let app: INestApplication
   let uut: unknown
-  let useCase: MockProxy<CreateUserUseCase>
+  let useCase: MockProxy<GetUserUseCase>
   let logger: MockProxy<Logger>
 
-  function givenUseCaseResolvesResponse (result: CreateUserResponse) {
+  function givenUseCaseResolvesResponse (result: GetUserResponse) {
     useCase.execute.mockResolvedValueOnce(result)
   }
 
-  function givenUseCaseRejectsWithUserAlreadyCreatedError () {
-    useCase.execute.mockRejectedValueOnce(CreateUserError.userAlreadyCreated())
+  function givenUseCaseRejectsWithUserNotFoundError () {
+    useCase.execute.mockRejectedValueOnce(GetUserError.useNotFound())
   }
 
   function givenUseCaseRejectsWithUnknownError () {
@@ -30,14 +26,14 @@ describe('CreateUserController', () => {
   }
 
   beforeEach(async () => {
-    useCase = mock<CreateUserUseCase>()
+    useCase = mock<GetUserUseCase>()
     logger = mock<Logger>()
     testingModule = await Test
       .createTestingModule({
-        controllers: [CreateUserController],
+        controllers: [GetUserController],
         providers: [
           {
-            provide: CreateUserUseCase,
+            provide: GetUserUseCase,
             useValue: useCase
           },
           {
@@ -58,28 +54,24 @@ describe('CreateUserController', () => {
     await testingModule.close()
   })
 
-  it('responds 409 CONFLICT' +
+  it('responds 404 NOT_FOUND' +
     ' when given use case rejected error with USER_ALREADY_CREATED', async () => {
-    const name = 'test-user-name'
-    const body: CreateUserBody = { name }
-    givenUseCaseRejectsWithUserAlreadyCreatedError()
+    const id = new UserId().value
+    givenUseCaseRejectsWithUserNotFoundError()
 
     const response = await request(uut)
-      .post('/users')
-      .send(body)
+      .get(`/users/${id}`)
 
-    expect(response.status).toBe(HttpStatus.CONFLICT)
+    expect(response.status).toBe(HttpStatus.NOT_FOUND)
   })
 
   it('responds 500 INTERNAL_SERVER_ERROR and logs' +
     ' when given use case rejected unknown error', async () => {
-    const name = 'test-user-name'
-    const body: CreateUserBody = { name }
+    const id = new UserId().value
     givenUseCaseRejectsWithUnknownError()
 
     const response = await request(uut)
-      .post('/users')
-      .send(body)
+      .get(`/users/${id}`)
 
     expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR)
     expect(logger.error).toHaveBeenCalled()
@@ -89,7 +81,6 @@ describe('CreateUserController', () => {
     const id = new UserId().value
     const name = 'test-user-name'
     const registeredAt = new Date()
-    const body: CreateUserBody = { name }
     givenUseCaseResolvesResponse({
       id,
       name,
@@ -97,8 +88,7 @@ describe('CreateUserController', () => {
     })
 
     const response = await request(uut)
-      .post('/users')
-      .send(body)
+      .get(`/users/${id}`)
 
     expect(response.status).toBe(HttpStatus.OK)
     expect(response.body).toEqual({

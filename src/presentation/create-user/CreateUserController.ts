@@ -10,33 +10,14 @@ import {
   Post
 } from '@nestjs/common'
 import { CreateUserError, CreateUserUseCase } from '../../application/create-user'
+import { UserViewModel } from '../UserViewModel'
 
 export class CreateUserBody {
   @ApiProperty()
   name: string
 }
 
-interface CreateUserViewModelProps {
-  id: string
-  name: string
-  registeredAt: Date
-}
-
-class CreateUserViewModel implements CreateUserViewModelProps {
-  @ApiProperty({ type: String })
-  id: string
-
-  @ApiProperty({ type: String })
-  name: string
-
-  @ApiProperty({ type: Date })
-  registeredAt: Date
-
-  constructor (props: CreateUserViewModelProps) {
-    this.id = props.id
-    this.name = props.name
-    this.registeredAt = props.registeredAt
-  }
+class CreateUserViewModel extends UserViewModel {
 }
 
 @Controller()
