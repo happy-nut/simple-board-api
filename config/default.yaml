@@ -6,3 +6,5 @@ typeorm:
   username: simple_board_local
   password: sQa%UNffrRxsbOVc
   database: simple_board_local
+  synchronize: true
+
