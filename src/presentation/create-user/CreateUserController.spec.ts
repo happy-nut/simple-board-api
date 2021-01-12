@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import request from 'supertest'
-import { HttpStatus, INestApplication } from '@nestjs/common'
+import { HttpStatus, INestApplication, Logger } from '@nestjs/common'
 import {
   CreateUserError,
   CreateUserResponse,
@@ -15,6 +15,7 @@ describe('CreateUserController', () => {
   let app: INestApplication
   let uut: unknown
   let useCase: MockProxy<CreateUserUseCase>
+  let logger: MockProxy<Logger>
 
   function givenUserCaseResolvesResponse (result: CreateUserResponse) {
     useCase.execute.mockResolvedValueOnce(result)
@@ -30,6 +31,7 @@ describe('CreateUserController', () => {
 
   beforeEach(async () => {
     useCase = mock<CreateUserUseCase>()
+    logger = mock<Logger>()
     testingModule = await Test
       .createTestingModule({
         controllers: [CreateUserController],
@@ -37,6 +39,10 @@ describe('CreateUserController', () => {
           {
             provide: CreateUserUseCase,
             useValue: useCase
+          },
+          {
+            provide: Logger,
+            useValue: logger
           }
         ]
       })
@@ -55,8 +61,8 @@ describe('CreateUserController', () => {
   it('responds 409 CONFLICT' +
     ' when given use case rejected error with USER_ALREADY_CREATED', async () => {
     const name = 'test-user-name'
-    givenUserCaseRejectsWithUserAlreadyCreatedError()
     const body: CreateUserBody = { name }
+    givenUserCaseRejectsWithUserAlreadyCreatedError()
 
     const response = await request(uut)
       .post('/users')
@@ -65,29 +71,30 @@ describe('CreateUserController', () => {
     expect(response.status).toBe(HttpStatus.CONFLICT)
   })
 
-  it('responds 500 INTERNAL SERVER ERROR' +
+  it.only('responds 500 INTERNAL SERVER ERROR and logs' +
     ' when given use case rejected unknown error', async () => {
     const name = 'test-user-name'
-    givenUserCaseRejectsWithUnknownError()
     const body: CreateUserBody = { name }
+    givenUserCaseRejectsWithUnknownError()
 
     const response = await request(uut)
       .post('/users')
       .send(body)
 
     expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR)
+    expect(logger.error).toHaveBeenCalled()
   })
 
   it('responds 200 OK when given use case resolved a user', async () => {
     const id = new UserId().value
     const name = 'test-user-name'
     const registeredAt = new Date()
+    const body: CreateUserBody = { name }
     givenUserCaseResolvesResponse({
       id,
       name,
       registeredAt
     })
-    const body: CreateUserBody = { name }
 
     const response = await request(uut)
       .post('/users')

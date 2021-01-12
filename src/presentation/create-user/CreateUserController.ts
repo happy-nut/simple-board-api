@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   InternalServerErrorException,
+  Logger,
   Post
 } from '@nestjs/common'
 import { CreateUserError, CreateUserUseCase } from '../../application/create-user'
@@ -40,7 +41,10 @@ class CreateUserViewModel implements CreateUserViewModelProps {
 
 @Controller()
 export class CreateUserController {
-  constructor (private readonly createUserUseCase: CreateUserUseCase) {
+  constructor (
+    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly logger: Logger
+  ) {
   }
 
   @HttpCode(HttpStatus.OK)
@@ -64,6 +68,8 @@ export class CreateUserController {
             throw new ConflictException()
         }
       }
+
+      this.logger.error(error)
       throw new InternalServerErrorException()
     }
   }
