@@ -5,6 +5,8 @@ import { CreateUserUseCase } from './application/create-user'
 import { USER_REPOSITORY } from './domain'
 import { TypeOrmUserRepository } from './infra/typeorm'
 import { DatabaseModule } from './modules/DatabaseModule'
+import { GetUserController } from './presentation/get-user'
+import { GetUserUseCase } from './application/get-user'
 
 @Module({
   imports: [
@@ -12,11 +14,13 @@ import { DatabaseModule } from './modules/DatabaseModule'
   ],
   controllers: [
     HealthzController,
-    CreateUserController
+    CreateUserController,
+    GetUserController
   ],
   providers: [
     Logger,
     CreateUserUseCase,
+    GetUserUseCase,
     {
       provide: USER_REPOSITORY,
       useClass: TypeOrmUserRepository
