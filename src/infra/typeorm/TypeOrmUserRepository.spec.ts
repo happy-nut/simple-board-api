@@ -39,11 +39,9 @@ describe('TypeOrmUserRepository', () => {
     it('finds a user when there is a user that has given ID', async () => {
       const user = User.createNew({ name: 'test-name' })
       await uut.save(user)
-      console.log(user)
 
       const found = await uut.findOneById(user.id) as User
 
-      console.log(found)
       expect(found).toBeDefined()
       expect(found.id.equals(user.id)).toBeTrue()
       expect(found.name).toBe(user.name)
@@ -62,23 +60,22 @@ describe('TypeOrmUserRepository', () => {
       expect(created.registeredAt).toEqual<Date>(user.registeredAt)
     })
 
-    it('updates a user when ID of given user already exists', async () => {
+    it('returns undefined when ID of given user already exists', async () => {
       const user = User.createNew({ name: 'test-name' })
       await uut.save(user)
-      const user2 = User.create(
+      const userWithSameId = User.create(
         {
           name: 'test-name-2',
           registeredAt: user.registeredAt
         },
         user.id
       )
+      const findSpy = jest.spyOn(uut, 'findOneById')
 
-      const updated = await uut.save(user2) as User
+      const updated = await uut.save(userWithSameId)
 
+      expect(findSpy).toHaveBeenCalledWith(user.id)
       expect(updated).toBeUndefined()
-      expect(updated.id.equals(user2.id)).toBeTrue()
-      expect(updated.name).toBe(user2.name)
-      expect(updated.registeredAt).toEqual<Date>(user2.registeredAt)
     })
   })
 })

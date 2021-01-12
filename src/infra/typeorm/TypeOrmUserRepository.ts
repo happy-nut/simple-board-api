@@ -22,6 +22,11 @@ export class TypeOrmUserRepository implements UserRepository {
   }
 
   async save (user: User): Promise<User | undefined> {
+    const alreadyCreated = await this.findOneById(user.id)
+    if (!_.isNil(alreadyCreated)) {
+      return undefined
+    }
+
     const userEntity = UserEntityMapper.fromDomain(user)
     const saved = await this.repository.save(userEntity)
     return UserEntityMapper.toDomain(saved)
