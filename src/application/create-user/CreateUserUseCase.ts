@@ -1,7 +1,8 @@
 import _ from 'lodash'
-import { User, UserRepository } from '../../domain'
+import { User, USER_REPOSITORY, UserRepository } from '../../domain'
 import { UseCase } from '../../shared/ddd'
 import { CreateUserError } from './CreateUserError'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface CreateUserRequest {
   name: string
@@ -13,8 +14,9 @@ export interface CreateUserResponse {
   registeredAt: Date
 }
 
+@Injectable()
 export class CreateUserUseCase implements UseCase<CreateUserRequest, CreateUserResponse> {
-  constructor (private readonly userRepository: UserRepository) {
+  constructor (@Inject(USER_REPOSITORY) private readonly userRepository: UserRepository) {
   }
 
   async execute (params: CreateUserRequest): Promise<CreateUserResponse> {

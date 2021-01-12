@@ -4,7 +4,9 @@ import { UserEntity } from './entities'
 import { UserId } from '../../domain/UserId'
 import _ from 'lodash'
 import { UserEntityMapper } from './mappers'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class TypeOrmUserRepository implements UserRepository {
   private readonly repository: Repository<UserEntity>
 
