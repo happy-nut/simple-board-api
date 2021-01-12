@@ -30,10 +30,10 @@ describe('CreateUserUseCase', () => {
       },
       new UserId()
     ))
+
     const request = {
       name
     }
-
     const response = await uut.execute(request)
 
     expect(userRepository.save).toHaveBeenCalled()
@@ -47,10 +47,10 @@ describe('CreateUserUseCase', () => {
   it('throws an error when given repository save resolves undefined', async () => {
     givenRepositorySaveResolvesUndefined()
     const name = 'test-name'
+
     const request = {
       name
     }
-
     await expect(uut.execute(request))
       .rejects
       .toThrowError(CreateUserError.userAlreadyCreated())

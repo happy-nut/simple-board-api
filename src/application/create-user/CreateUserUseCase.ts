@@ -19,8 +19,8 @@ export class CreateUserUseCase implements UseCase<CreateUserRequest, CreateUserR
   constructor (@Inject(USER_REPOSITORY) private readonly userRepository: UserRepository) {
   }
 
-  async execute (params: CreateUserRequest): Promise<CreateUserResponse> {
-    const user = User.createNew({ name: params.name })
+  async execute (request: CreateUserRequest): Promise<CreateUserResponse> {
+    const user = User.createNew({ name: request.name })
     const created = await this.userRepository.save(user)
     if (_.isNil(created)) {
       throw CreateUserError.userAlreadyCreated()

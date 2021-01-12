@@ -71,7 +71,7 @@ describe('CreateUserController', () => {
     expect(response.status).toBe(HttpStatus.CONFLICT)
   })
 
-  it.only('responds 500 INTERNAL SERVER ERROR and logs' +
+  it('responds 500 INTERNAL SERVER ERROR and logs' +
     ' when given use case rejected unknown error', async () => {
     const name = 'test-user-name'
     const body: CreateUserBody = { name }
