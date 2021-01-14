@@ -29,6 +29,7 @@ describe('User', () => {
 
       const uut = User.createNew(props)
 
+      expect(uut.id).toBeInstanceOf(UserId)
       expect(uut.id.value).toBeString()
       expect(uut.name).toBe(name)
       expect(uut.registeredAt).toBeInstanceOf(Date)
