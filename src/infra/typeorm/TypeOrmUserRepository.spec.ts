@@ -1,30 +1,30 @@
-import { Connection, createConnection } from 'typeorm'
+import { Connection } from 'typeorm'
 import { User } from '../../domain'
 import { UserId } from '../../domain/UserId'
-import { UserEntity } from './entities'
-import config from 'config'
-import { ConnectionOptions } from 'typeorm/connection/ConnectionOptions'
 import { TypeOrmUserRepository } from './TypeOrmUserRepository'
+import { Test, TestingModule } from '@nestjs/testing'
+import { DatabaseModule } from '../../modules/DatabaseModule'
+import { UserEntity } from './entities'
 
 describe('TypeOrmUserRepository', () => {
   let connection: Connection
+  let testingModule: TestingModule
   let uut: TypeOrmUserRepository
 
   beforeEach(async () => {
-    // TODO: Introduce Database Module.
-    connection = await createConnection(
-      {
-        ...config.get<ConnectionOptions>('typeorm'),
-        entities: [
-          UserEntity
-        ]
-      }
-    )
+    testingModule = await Test
+      .createTestingModule({
+        imports: [DatabaseModule]
+      })
+      .compile()
+    connection = await testingModule.resolve(Connection)
     uut = new TypeOrmUserRepository(connection)
   })
 
   afterEach(async () => {
-    await connection.close()
+    const repository = await connection.getRepository(UserEntity)
+    await repository.clear()
+    await testingModule.close()
   })
 
   describe('.findOneById', () => {

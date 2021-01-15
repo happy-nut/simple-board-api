@@ -11,13 +11,22 @@ interface PostProps {
   createdAt: Date
 }
 
+interface PostCreateNewProps {
+  authorId: UserId
+  title: string
+  content: string
+}
+
 export class Post extends AggregateRoot<PostProps> {
   static create (props: PostProps, id: PostId): Post {
     return new Post({ ...props }, id)
   }
 
-  static createNew (props: PostProps): Post {
-    return new Post({ ...props }, new PostId())
+  static createNew (props: PostCreateNewProps): Post {
+    return new Post({
+      ...props,
+      createdAt: new Date()
+    }, new PostId())
   }
 
   get authorId (): UserId {

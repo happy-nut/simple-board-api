@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid'
 export class EntityId {
   private readonly _value: string
 
-  constructor (private id?: string) {
+  constructor (id?: string) {
     if (_.isNil(id)) {
       this._value = nanoid()
       return

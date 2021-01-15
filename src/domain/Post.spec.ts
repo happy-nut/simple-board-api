@@ -40,8 +40,7 @@ describe('Post', () => {
         {
           authorId,
           title,
-          content,
-          createdAt
+          content
         }
       )
 
