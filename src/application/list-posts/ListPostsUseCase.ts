@@ -2,7 +2,6 @@ import { User, USER_REPOSITORY, UserRepository } from '../../domain'
 import { UseCase } from '../../shared/ddd'
 import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
 import _ from 'lodash'
-import { ListPostsError } from './ListPostsError'
 import { Inject, Injectable } from '@nestjs/common'
 
 interface ListPostsRequest {
@@ -36,12 +35,8 @@ export class ListPostsUseCase implements UseCase<ListPostsRequest, ListPostsResp
       return []
     }
 
-    const ids = _.map(posts, (post) => post.id)
+    const ids = _.map(posts, (post) => post.authorId)
     const users = await this.userRepository.findAllByIds(ids)
-    if (users.length !== posts.length) {
-      throw ListPostsError.authorNotFound()
-    }
-
     return _.map(posts, (post) => {
       const user = users.get(post.authorId) as User
       return ({

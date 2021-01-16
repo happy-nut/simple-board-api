@@ -3,7 +3,7 @@ import request from 'supertest'
 import { HttpStatus, INestApplication, Logger } from '@nestjs/common'
 import { mock, MockProxy } from 'jest-mock-extended'
 import { ListPostsController } from './ListPostsController'
-import { ListPostsError, ListPostsResponse, ListPostsUseCase } from '../../application/list-posts'
+import { ListPostsResponse, ListPostsUseCase } from '../../application/list-posts'
 
 describe('ListPostsController', () => {
   let testingModule: TestingModule
@@ -14,10 +14,6 @@ describe('ListPostsController', () => {
 
   function givenUseCaseResolvesResponse (result: ListPostsResponse) {
     useCase.execute.mockResolvedValueOnce(result)
-  }
-
-  function givenUseCaseRejectsWithAuthorNotFoundError () {
-    useCase.execute.mockRejectedValueOnce(ListPostsError.authorNotFound())
   }
 
   function givenUseCaseRejectsWithUnknownError () {
@@ -51,16 +47,6 @@ describe('ListPostsController', () => {
   afterEach(async () => {
     await app.close()
     await testingModule.close()
-  })
-
-  it('responds 404 NOT_FOUND' +
-    ' when given use case rejected error with AUTHOR_NOT_FOUND', async () => {
-    givenUseCaseRejectsWithAuthorNotFoundError()
-
-    const response = await request(uut)
-      .get('/posts')
-
-    expect(response.status).toBe(HttpStatus.NOT_FOUND)
   })
 
   it('responds 500 INTERNAL_SERVER_ERROR and logs' +

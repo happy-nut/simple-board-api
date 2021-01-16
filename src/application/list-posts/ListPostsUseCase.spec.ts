@@ -5,7 +5,6 @@ import { ListPostsUseCase } from './ListPostsUseCase'
 import { PostRepository } from '../../domain/PostRepository'
 import { Post } from '../../domain/Post'
 import _ from 'lodash'
-import { ListPostsError } from './ListPostsError'
 import { Users } from '../../domain/Users'
 
 describe('ListPostsUseCase', () => {
@@ -41,10 +40,6 @@ describe('ListPostsUseCase', () => {
     postRepository.findAll.mockResolvedValueOnce(posts)
   }
 
-  function givenUserRepositoryFindAllByIdsResolvesEmptyList () {
-    userRepository.findAllByIds.mockResolvedValueOnce(new Users([]))
-  }
-
   function givenUserRepositoryFindAllByIdsResolvesUsers (users: User[]) {
     userRepository.findAllByIds.mockResolvedValueOnce(new Users(users))
   }
@@ -62,19 +57,6 @@ describe('ListPostsUseCase', () => {
 
     expect(postRepository.findAll).toHaveBeenCalled()
     expect(result).toEqual([])
-  })
-
-  it('throws an authorNotFound error' +
-    ' when given repository findById resolves undefined', async () => {
-    const posts = createGivenNumberOfPosts(2)
-    givenPostRepositoryFindAllResolvesPosts(posts)
-    givenUserRepositoryFindAllByIdsResolvesEmptyList()
-
-    await expect(uut.execute({}))
-      .rejects
-      .toThrowError(ListPostsError.authorNotFound())
-    expect(postRepository.findAll).toHaveBeenCalled()
-    expect(userRepository.findAllByIds).toHaveBeenCalled()
   })
 
   it('responds posts', async () => {

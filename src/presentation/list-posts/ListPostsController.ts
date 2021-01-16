@@ -11,10 +11,9 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
   Query
 } from '@nestjs/common'
-import { ListPostsError, ListPostsUseCase } from '../../application/list-posts'
+import { ListPostsUseCase } from '../../application/list-posts'
 import _ from 'lodash'
 import { ApiImplicitQuery } from '@nestjs/swagger/dist/decorators/api-implicit-query.decorator'
 
@@ -79,13 +78,6 @@ export class ListPostsController {
         createdAt: summary.createdAt
       }))
     } catch (error) {
-      if (error instanceof ListPostsError) {
-        switch (error.code) {
-          case 'AUTHOR_NOT_FOUND':
-            throw new NotFoundException()
-        }
-      }
-
       this.logger.error(error)
       throw new InternalServerErrorException()
     }
