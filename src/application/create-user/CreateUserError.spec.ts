@@ -1,12 +1,12 @@
 import { CreateUserError } from './CreateUserError'
 
 describe('CreateUserError', () => {
-  describe('.userAlreadyCreated()', () => {
-    it('creates an CreateUserError with code USER_ALREADY_CREATED', () => {
-      const error = CreateUserError.userAlreadyCreated()
+  describe('.userCreatingFailed()', () => {
+    it('creates an CreateUserError with code USER_CREATING_FAILED', () => {
+      const error = CreateUserError.userCreatingFailed()
 
       expect(error).toBeInstanceOf(CreateUserError)
-      expect(error.code).toBe('USER_ALREADY_CREATED')
+      expect(error.code).toBe('USER_CREATING_FAILED')
     })
   })
 })

@@ -1,12 +1,10 @@
 import {
-  ApiConflictResponse,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiProperty
 } from '@nestjs/swagger'
 import {
   Body,
-  ConflictException,
   Controller,
   HttpCode,
   HttpStatus,
@@ -36,7 +34,6 @@ export class CreateUserController {
   @HttpCode(HttpStatus.OK)
   @Post('users')
   @ApiOkResponse({ type: CreateUserViewModel })
-  @ApiConflictResponse({ description: 'user already created' })
   @ApiInternalServerErrorResponse()
   async create (@Body() body: CreateUserBody): Promise<CreateUserViewModel> {
     try {
@@ -51,8 +48,9 @@ export class CreateUserController {
     } catch (error) {
       if (error instanceof CreateUserError) {
         switch (error.code) {
-          case 'USER_ALREADY_CREATED':
-            throw new ConflictException()
+          case 'USER_CREATING_FAILED':
+            // TODO: Is this really needed?
+            throw new InternalServerErrorException('Failed to create a user')
         }
       }
 

@@ -53,7 +53,7 @@ describe('CreateUserUseCase', () => {
     }
     await expect(uut.execute(request))
       .rejects
-      .toThrowError(CreateUserError.userAlreadyCreated())
+      .toThrowError(CreateUserError.userCreatingFailed())
     expect(userRepository.save).toHaveBeenCalled()
   })
 })

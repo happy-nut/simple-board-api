@@ -1,9 +1,9 @@
 import { UseCaseError } from '../../shared/ddd'
 
-type ErrorCodes = 'USER_ALREADY_CREATED'
+type ErrorCodes = 'USER_CREATING_FAILED'
 
 export class CreateUserError extends UseCaseError<ErrorCodes> {
-  static userAlreadyCreated (): CreateUserError {
-    return new CreateUserError('USER_ALREADY_CREATED')
+  static userCreatingFailed (): CreateUserError {
+    return new CreateUserError('USER_CREATING_FAILED')
   }
 }

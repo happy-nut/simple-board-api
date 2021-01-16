@@ -11,5 +11,13 @@ type User {
 scalar Date
 
 type Query {
-  user(id: String!): User!
+  getUser(id: String!): User!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  name: String!
 }

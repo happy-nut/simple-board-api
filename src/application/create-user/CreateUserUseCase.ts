@@ -23,7 +23,7 @@ export class CreateUserUseCase implements UseCase<CreateUserRequest, CreateUserR
     const user = User.createNew({ name: request.name })
     const created = await this.userRepository.save(user)
     if (_.isNil(created)) {
-      throw CreateUserError.userAlreadyCreated()
+      throw CreateUserError.userCreatingFailed()
     }
 
     return {

@@ -1,7 +1,8 @@
-import { Args, Field, ObjectType, Query, Resolver } from '@nestjs/graphql'
+import { Args, Field, InputType, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql'
 import { GetUserError, GetUserUseCase } from '../../application/get-user'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
+import { CreateUserError, CreateUserUseCase } from '../../application/create-user'
 
 interface UserViewModelProps {
   id: string
@@ -28,18 +29,23 @@ class UserViewModel implements UserViewModelProps {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-@Resolver((of: unknown) => UserViewModel)
+@InputType()
+export class CreateUserInput {
+  @Field()
+  name: string
+}
+
+@Resolver(() => UserViewModel)
 export class UserResolver {
   constructor (
     private readonly getUserUseCase: GetUserUseCase,
+    private readonly createUserUseCase: CreateUserUseCase,
     private readonly logger: Logger
   ) {
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @Query(returns => UserViewModel)
-  async user (@Args('id', { type: () => String }) id: string): Promise<UserViewModel> {
+  @Query(() => UserViewModel)
+  async getUser (@Args('id', { type: () => String }) id: string): Promise<UserViewModel> {
     try {
       const user = await this.getUserUseCase.execute({ id })
       return new UserViewModel({
@@ -52,6 +58,28 @@ export class UserResolver {
         switch (error.code) {
           case 'USER_NOT_FOUND':
             throw new GraphQLError(`User not found with ID: ${id}`)
+        }
+      }
+
+      this.logger.error(error)
+      throw error
+    }
+  }
+
+  @Mutation(() => UserViewModel)
+  async createUser (@Args('input') input: CreateUserInput): Promise<UserViewModel> {
+    try {
+      const user = await this.createUserUseCase.execute({ name: input.name })
+      return new UserViewModel({
+        id: user.id,
+        name: user.name,
+        registeredAt: user.registeredAt
+      })
+    } catch (error) {
+      if (error instanceof CreateUserError) {
+        switch (error.code) {
+          case 'USER_CREATING_FAILED':
+            throw new GraphQLError('Failed to create a user')
         }
       }
 

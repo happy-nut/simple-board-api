@@ -21,8 +21,8 @@ describe('CreateUserController', () => {
     useCase.execute.mockResolvedValueOnce(result)
   }
 
-  function givenUseCaseRejectsWithUserAlreadyCreatedError () {
-    useCase.execute.mockRejectedValueOnce(CreateUserError.userAlreadyCreated())
+  function givenUseCaseRejectsWithUserCreatingFailedError () {
+    useCase.execute.mockRejectedValueOnce(CreateUserError.userCreatingFailed())
   }
 
   function givenUseCaseRejectsWithUnknownError () {
@@ -58,17 +58,17 @@ describe('CreateUserController', () => {
     await testingModule.close()
   })
 
-  it('responds 409 CONFLICT' +
-    ' when given use case rejected error with USER_ALREADY_CREATED', async () => {
+  it('responds 500 INTERNAL_SERVER_ERROR' +
+    ' when given use case rejected error with USER_CREATING_FAILED', async () => {
     const name = 'test-user-name'
     const body: CreateUserBody = { name }
-    givenUseCaseRejectsWithUserAlreadyCreatedError()
+    givenUseCaseRejectsWithUserCreatingFailedError()
 
     const response = await request(uut)
       .post('/users')
       .send(body)
 
-    expect(response.status).toBe(HttpStatus.CONFLICT)
+    expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR)
   })
 
   it('responds 500 INTERNAL_SERVER_ERROR and logs' +
