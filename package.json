@@ -74,7 +74,7 @@
       "./test/setUpTest.ts"
     ],
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "src/**/*.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

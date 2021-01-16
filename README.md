@@ -16,18 +16,23 @@ DB는 RDB/NoSQL 어떤 것을 이용해도 됩니다. firebase처럼 serverless 
 모델은 User(작성자), Post(게시물), Comment(댓글)가 존재합니다. 모든 모델은 기본적으로 CRUD가 가능해야 합니다.
 이하의 모델에 따라 임의의 데이터를 미리 DB에 적재하여 사용하세요. 필요한 경우 모델을 수정하거나 추가하세요.
 
-1. Post는 여러 Comment를 가질 수 있습니다. (1:N). ID, 작성자, 제목, 내용, 작성일을 가집니다.
-2. Comment는 ID, 작성자, 내용, 작성일을 가집니다.
-3. User는 여러 Post를 가질 수 있습니다 (1:N), 여러 Comment를 가질 수 있습니다. (1:N), ID, 이름, 가입일을 가집니다.
-4. User는 삭제/업데이트가 불가능 합니다.
-5. 특정 User가 작성한 모든 Post를 조회할 수 있어야 합니다.
-6. 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
-7. 특정 Post에 달린 Comment를 조회할 수 있어야 하며, 페이지네이션이 가능하여야 합니다.
-8. Post와 Comment는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
+- [ ] Post는 여러 Comment를 가질 수 있습니다. (1:N). ID, 작성자, 제목, 내용, 작성일을 가집니다.
+- [ ] Comment는 ID, 작성자, 내용, 작성일을 가집니다.
+- [ ] User는 여러 Post를 가질 수 있습니다 (1:N), 여러 Comment를 가질 수 있습니다. (1:N), ID, 이름, 가입일을 가집니다.
+- [x] User는 삭제/업데이트가 불가능 합니다.
+- [ ] 특정 User가 작성한 모든 Post를 조회할 수 있어야 합니다.
+- [ ] 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
+- [ ] 특정 Post에 달린 Comment를 조회할 수 있어야 하며, 페이지네이션이 가능하여야 합니다.
+- [ ] Post와 Comment는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
 
-## Prerequisite
+## Prerequisite - 필수 요구 사항
 
-1. MySQL 설치
+0. Node 버전 확인
+   
+   개발 환경의 Node 버전은 `v12.16.1` 입니다. 버전 호환을 위해 가급적 실행환경에서 Node 버전을 맞춰주세요.
+
+
+1. MySQL 5.7 버전 설치 (명령어는 Mac OS 기준)
 
 ```bash
 brew install mysql@5.7
@@ -45,8 +50,37 @@ brew services start mysql
 mysql -u root -p < ./scripts/setUpDatabase.sql
 ```
 
-## Run test
+## Run - 실행
+
+로컬 환경에서 다음 명령어로 서버를 실행시킬 수 있습니다.
+
+```bash
+yarn start
+```
+
+로컬 서버 주소: http://localhost:8000
+
+### Swagger
+
+Swagger 를 통해 `curl` 같은 CLI를 이용하지 않고 브라우저에서 간편하게 API를 테스트 해보실 수 있습니다.
+
+Swagger 도큐먼트 주소: http://localhost:8000/v1/docs/
+
+### GraphQL Playground
+
+GraphQL Playground 를 통해 `curl` 같은 CLI를 이용하지 않고 브라우저에서 간편하게 API를 테스트 해보실 수 있습니다.
+
+graphql Playground 주소: http://localhost:8000/graphql/
+
+
+## Run test - 테스트 실행
 
 ```bash
 yarn test
+```
+
+테스트 커버리지 검사
+
+```bash
+yarn test:cov
 ```
