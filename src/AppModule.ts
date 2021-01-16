@@ -13,6 +13,8 @@ import { TypeOrmPostRepository } from './infra/typeorm/TypeOrmPostRepository'
 import { POST_REPOSITORY } from './domain/PostRepository'
 import { SavePostController } from './presentation/save-post'
 import { SavePostUseCase } from './application/save-post'
+import { DeletePostController } from './presentation/delete-post'
+import { DeletePostUseCase } from './application/delete-post'
 
 @Module({
   imports: [
@@ -23,7 +25,8 @@ import { SavePostUseCase } from './application/save-post'
     CreateUserController,
     GetUserController,
     ListPostsController,
-    SavePostController
+    SavePostController,
+    DeletePostController
   ],
   providers: [
     Logger,
@@ -31,6 +34,7 @@ import { SavePostUseCase } from './application/save-post'
     GetUserUseCase,
     ListPostsUseCase,
     SavePostUseCase,
+    DeletePostUseCase,
     {
       provide: USER_REPOSITORY,
       useClass: TypeOrmUserRepository

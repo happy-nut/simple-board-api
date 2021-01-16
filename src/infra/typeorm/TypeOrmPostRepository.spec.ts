@@ -165,7 +165,7 @@ describe('TypeOrmPostRepository', () => {
     })
   })
 
-  describe('.removeOneById', () => {
+  describe('.removeOne', () => {
     it('removes nothing and resolves undefined' +
       ' when there is no post corresponding given ID', async () => {
       const post = Post.createNew({

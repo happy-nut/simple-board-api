@@ -7,6 +7,8 @@ import {
   Param
 } from '@nestjs/common'
 import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
+import { ApiImplicitParam } from '@nestjs/swagger/dist/decorators/api-implicit-param.decorator'
+import { ApiInternalServerErrorResponse, ApiNotFoundResponse } from '@nestjs/swagger'
 
 type DeletePostViewModel = void
 
@@ -19,7 +21,13 @@ export class DeletePostController {
   }
 
   @Delete('/posts/:postId')
-  async delete (@Param() postId: string): Promise<DeletePostViewModel> {
+  @ApiImplicitParam({
+    name: 'postId',
+    type: String
+  })
+  @ApiNotFoundResponse()
+  @ApiInternalServerErrorResponse()
+  async delete (@Param('postId') postId: string): Promise<DeletePostViewModel> {
     try {
       await this.deletePostUseCase.execute({ postId })
     } catch (error) {

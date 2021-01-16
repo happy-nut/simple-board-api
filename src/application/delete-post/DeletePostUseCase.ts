@@ -1,8 +1,9 @@
 import { UseCase } from '../../shared/ddd'
-import { PostRepository } from '../../domain/PostRepository'
+import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
 import { PostId } from '../../domain/Post'
 import _ from 'lodash'
 import { DeletePostError } from './DeletePostError'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface DeletePostRequest {
   postId: string
@@ -10,8 +11,12 @@ interface DeletePostRequest {
 
 type DeletePostResponse = void
 
+@Injectable()
 export class DeletePostUseCase implements UseCase<DeletePostRequest, DeletePostResponse> {
-  constructor (private readonly postRepository: PostRepository) {
+  constructor (
+    @Inject(POST_REPOSITORY)
+    private readonly postRepository: PostRepository
+  ) {
   }
 
   async execute (request: DeletePostRequest): Promise<DeletePostResponse> {
