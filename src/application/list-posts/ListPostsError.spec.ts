@@ -1,7 +1,7 @@
 import { ListPostsError } from './ListPostsError'
 
 describe('ListPostsError', () => {
-  describe('authorNotFound', () => {
+  describe('.authorNotFound()', () => {
     it('creates an ListPostsError with code AUTHOR_NOT_FOUND', () => {
       const error = ListPostsError.authorNotFound()
 

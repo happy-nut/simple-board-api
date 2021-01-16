@@ -1,7 +1,7 @@
 import { GetUserError } from './GetUserError'
 
 describe('GetUserError', () => {
-  describe('useNotFound', () => {
+  describe('.useNotFound()', () => {
     it('creates an GetUserError with code USER_NOT_FOUND', () => {
       const error = GetUserError.useNotFound()
 

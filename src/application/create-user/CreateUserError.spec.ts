@@ -1,7 +1,7 @@
 import { CreateUserError } from './CreateUserError'
 
 describe('CreateUserError', () => {
-  describe('userAlreadyCreated', () => {
+  describe('.userAlreadyCreated()', () => {
     it('creates an CreateUserError with code USER_ALREADY_CREATED', () => {
       const error = CreateUserError.userAlreadyCreated()
 
