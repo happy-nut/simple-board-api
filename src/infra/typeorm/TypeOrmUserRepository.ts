@@ -5,6 +5,7 @@ import { UserId } from '../../domain/UserId'
 import _ from 'lodash'
 import { UserEntityMapper } from './mappers'
 import { Injectable } from '@nestjs/common'
+import { Users } from '../../domain/Users'
 
 @Injectable()
 export class TypeOrmUserRepository implements UserRepository {
@@ -21,6 +22,13 @@ export class TypeOrmUserRepository implements UserRepository {
     }
 
     return UserEntityMapper.toDomain(entity)
+  }
+
+  async findAllByIds (ids: UserId[]): Promise<Users> {
+    const userIds = _.map(ids, (id) => id.value)
+    const userEntities = await this.repository.findByIds(userIds)
+    const domains = _.map(userEntities, UserEntityMapper.toDomain)
+    return new Users(domains)
   }
 
   async save (user: User): Promise<User | undefined> {
