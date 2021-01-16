@@ -59,27 +59,33 @@ DB는 RDB/NoSQL 어떤 것을 이용해도 됩니다. firebase처럼 serverless 
 
 ## Prerequisite - 필수 요구 사항
 
-0. Node 버전 확인
+1. Node 버전 확인
    
    개발 환경의 Node 버전은 `v12.16.1` 입니다. 버전 호환을 위해 가급적 실행환경에서 Node 버전을 맞춰주세요.
 
 
-1. MySQL 5.7 버전 설치 (명령어는 Mac OS 기준)
+2. MySQL 5.7 버전 설치 (명령어는 Mac OS 기준)
 
 ```bash
 brew install mysql@5.7
 ```
 
-2. MySQL 실행
+3. MySQL 실행
 
 ```bash
 brew services start mysql
 ```
 
-3. `setUpDatabase.sql` SQL 실행
+4. `setUpDatabase.sql` SQL 실행
 
 ```bash
 mysql -u root -p < ./scripts/setUpDatabase.sql
+```
+
+5. 모듈 의존성 설치
+
+```bash
+yarn
 ```
 
 ## Run - 실행
