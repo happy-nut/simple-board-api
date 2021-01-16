@@ -33,7 +33,11 @@ export class TypeOrmPostRepository implements PostRepository {
   }
 
   async findAllByUserId (userId: UserId): Promise<Post[]> {
-    throw new Error()
+    const postEntities = await this.repository.find({
+      where: { authorId: userId.value },
+      order: { createdAt: 'ASC' }
+    })
+    return _.map(postEntities, PostEntityMapper.toDomain)
   }
 
   async save (post: Post): Promise<Post | undefined> {

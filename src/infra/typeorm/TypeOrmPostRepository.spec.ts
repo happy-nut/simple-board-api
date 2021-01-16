@@ -5,7 +5,10 @@ import { Post, PostId } from '../../domain/Post'
 import { TypeOrmPostRepository } from './TypeOrmPostRepository'
 import _ from 'lodash'
 import { PostEntity } from './entities'
-import { DatabaseModule } from '../../modules/database/DatabaseModule'
+import { DatabaseModule } from '../../modules'
+import {
+  createPostsOrderByCreatedAt
+} from '../../../test/support/utils/createPostsOrderByCreatedAt'
 
 describe('TypeOrmPostRepository', () => {
   let connection: Connection
@@ -13,17 +16,8 @@ describe('TypeOrmPostRepository', () => {
   let uut: TypeOrmPostRepository
 
   async function whenGivenNumberOfPostsSaved (numberOfPosts: number): Promise<void> {
-     await Promise.all(_.times(numberOfPosts, async (i) => {
-       const time = `${i}`.padStart(2, '0')
-       const post = Post.create(
-         {
-           createdAt: new Date(`2021-01-16T${time}:00:00Z`),
-           content: `test-content-${i}`,
-           title: `test-title-${i}`,
-           authorId: new UserId(`test-user-id-${i}`)
-         },
-         new PostId()
-       )
+    const posts = createPostsOrderByCreatedAt(numberOfPosts)
+     await Promise.all(_.map(posts, async (post) => {
        await uut.save(post)
      }))
   }
@@ -117,6 +111,21 @@ describe('TypeOrmPostRepository', () => {
       expect(found.title).toBe(post.title)
       expect(found.content).toBe(post.content)
       expect(found.createdAt).toEqual<Date>(post.createdAt)
+    })
+  })
+
+  describe('.findAllByUserId', () => {
+    it('finds posts with given user ID', async () => {
+      const userId = new UserId('test-user-id')
+      const posts = createPostsOrderByCreatedAt(2, userId)
+      await uut.save(posts[0])
+      await uut.save(posts[1])
+      const postByOtherUser = createPostsOrderByCreatedAt(1)
+      await uut.save(postByOtherUser[0])
+
+      const founds = await uut.findAllByUserId(userId)
+
+      expect(founds).toEqual(posts)
     })
   })
 
