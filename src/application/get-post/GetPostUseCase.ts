@@ -1,9 +1,10 @@
 import { UseCase } from '../../shared/ddd'
 import _ from 'lodash'
-import { PostRepository } from '../../domain/PostRepository'
+import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
 import { PostId } from '../../domain/Post'
 import { GetPostError } from './GetPostError'
-import { UserRepository } from '../../domain'
+import { USER_REPOSITORY, UserRepository } from '../../domain'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface GetPostRequest {
   id: string
@@ -18,9 +19,12 @@ export interface GetPostResponse {
   createdAt: Date
 }
 
+@Injectable()
 export class GetPostUseCase implements UseCase<GetPostRequest, GetPostResponse> {
   constructor (
+    @Inject(POST_REPOSITORY)
     private readonly postRepository: PostRepository,
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository
   ) {
   }

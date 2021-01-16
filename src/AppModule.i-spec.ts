@@ -9,6 +9,7 @@ import { DeletePostController } from './presentation/delete-post'
 import { DatabaseModule, GraphQueryLanguageModule } from './modules'
 import { UserResolver } from './presentation/resolve-user'
 import { ListPostsByAuthorIdController } from './presentation/list-posts-by-author-id'
+import { GetPostController } from './presentation/get-post'
 
 describe('AppModule', () => {
   let uut: TestingModule
@@ -59,6 +60,10 @@ describe('AppModule', () => {
 
   it('gets ListPostsByAuthorIdController', () => {
     expect(uut.get(ListPostsByAuthorIdController)).toBeInstanceOf(ListPostsByAuthorIdController)
+  })
+
+  it('gets GetPostController', () => {
+    expect(uut.get(GetPostController)).toBeInstanceOf(GetPostController)
   })
 
   it('gets UserResolver', () => {

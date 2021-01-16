@@ -18,6 +18,8 @@ import { DatabaseModule, GraphQueryLanguageModule } from './modules'
 import { UserResolver } from './presentation/resolve-user'
 import { ListPostsByAuthorIdController } from './presentation/list-posts-by-author-id'
 import { ListPostsByAuthorIdUseCase } from './application/list-posts-by-author-id'
+import { GetPostController } from './presentation/get-post'
+import { GetPostUseCase } from './application/get-post'
 
 @Module({
   imports: [
@@ -31,7 +33,8 @@ import { ListPostsByAuthorIdUseCase } from './application/list-posts-by-author-i
     ListPostsController,
     SavePostController,
     DeletePostController,
-    ListPostsByAuthorIdController
+    ListPostsByAuthorIdController,
+    GetPostController
   ],
   providers: [
     Logger,
@@ -41,6 +44,7 @@ import { ListPostsByAuthorIdUseCase } from './application/list-posts-by-author-i
     SavePostUseCase,
     DeletePostUseCase,
     ListPostsByAuthorIdUseCase,
+    GetPostUseCase,
     UserResolver,
     {
       provide: USER_REPOSITORY,
