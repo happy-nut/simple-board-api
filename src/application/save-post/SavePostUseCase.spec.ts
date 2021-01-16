@@ -104,13 +104,14 @@ describe('SavePostUseCase', () => {
       },
       authorId
     ))
-    givenPostRepositorySaveResolvesPost(Post.createNew(
+    const post = Post.createNew(
       {
         title,
         content,
         authorId
       }
-    ))
+    )
+    givenPostRepositorySaveResolvesPost(post)
 
     const request = {
       title,
@@ -129,7 +130,9 @@ describe('SavePostUseCase', () => {
       },
       expect.any(PostId)
     ))
-    expect(response).toBeUndefined()
+    expect(response).toEqual({
+      postId: post.id.value
+    })
   })
 
   it('throws postNotFound error' +
@@ -206,6 +209,8 @@ describe('SavePostUseCase', () => {
       },
       post.id
     ))
-    expect(response).toBeUndefined()
+    expect(response).toEqual({
+      postId: post.id.value
+    })
   })
 })

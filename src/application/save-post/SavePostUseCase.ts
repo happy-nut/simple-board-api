@@ -14,7 +14,9 @@ interface SavePostRequest {
   content: string
 }
 
-export type SavePostResponse = void
+export interface SavePostResponse {
+  postId: string
+}
 
 @Injectable()
 export class SavePostUseCase implements UseCase<SavePostRequest, SavePostResponse> {
@@ -39,12 +41,17 @@ export class SavePostUseCase implements UseCase<SavePostRequest, SavePostRespons
       if (_.isNil(created)) {
         throw SavePostError.postCreatingFailed()
       }
-      return
+      return {
+        postId: created.id.value
+      }
     }
 
     const updated = await this.updatePost(id, title, content, userId)
     if (_.isNil(updated)) {
       throw SavePostError.postUpdatingFailed()
+    }
+    return {
+      postId: updated.id.value
     }
   }
 

@@ -20,7 +20,7 @@ describe('SavePostController', () => {
   let logger: MockProxy<Logger>
 
   function givenUseCaseResolvesResponse () {
-    useCase.execute.mockResolvedValueOnce()
+    useCase.execute.mockResolvedValueOnce({ postId: POST_ID })
   }
 
   function givenUseCaseRejectsWithAuthorNotFoundError () {
@@ -115,7 +115,9 @@ describe('SavePostController', () => {
         .send(BODY)
 
       expect(response.status).toBe(HttpStatus.OK)
-      expect(response.body).toEqual({})
+      expect(response.body).toEqual({
+        id: POST_ID
+      })
     })
   })
 
@@ -173,7 +175,9 @@ describe('SavePostController', () => {
         .send(BODY)
 
       expect(response.status).toBe(HttpStatus.OK)
-      expect(response.body).toEqual({})
+      expect(response.body).toEqual({
+        id: POST_ID
+      })
     })
   })
 })

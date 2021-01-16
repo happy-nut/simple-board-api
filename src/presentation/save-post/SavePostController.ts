@@ -29,7 +29,18 @@ export class SavePostBody {
   authorId: string
 }
 
-type SavePostViewModel = void
+interface SavePostViewModelProps {
+  id: string
+}
+
+class SavePostViewModel implements SavePostViewModelProps {
+  @ApiProperty()
+  id: string
+
+  constructor (props: SavePostViewModelProps) {
+    this.id = props.id
+  }
+}
 
 @Controller()
 export class SavePostController {
@@ -41,15 +52,18 @@ export class SavePostController {
 
   @HttpCode(HttpStatus.OK)
   @Post('posts')
-  @ApiOkResponse()
+  @ApiOkResponse({ type: SavePostViewModel })
   @ApiNotFoundResponse({ description: 'author not found' })
   @ApiInternalServerErrorResponse()
   async create (@Body() body: SavePostBody): Promise<SavePostViewModel> {
     try {
-      await this.savePostUseCase.execute({
+      const response = await this.savePostUseCase.execute({
         authorId: body.authorId,
         content: body.content,
         title: body.content
+      })
+      return new SavePostViewModel({
+        id: response.postId
       })
     } catch (error) {
       if (error instanceof SavePostError) {
@@ -76,11 +90,15 @@ export class SavePostController {
     @Body() body: SavePostBody
   ): Promise<SavePostViewModel> {
     try {
-      await this.savePostUseCase.execute({
+      const response = await this.savePostUseCase.execute({
         id: postId,
         authorId: body.authorId,
         content: body.content,
         title: body.content
+      })
+
+      return new SavePostViewModel({
+        id: response.postId
       })
     } catch (error) {
       if (error instanceof SavePostError) {
