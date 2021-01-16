@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { Connection } from 'typeorm'
-import { DatabaseModule } from './DatabaseModule'
+import { DatabaseModule } from './database/DatabaseModule'
 
 
 describe('DatabaseModule', () => {
