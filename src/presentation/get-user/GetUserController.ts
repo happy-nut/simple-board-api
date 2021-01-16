@@ -1,4 +1,4 @@
-import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger'
+import { ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger'
 import {
   Controller,
   Get,
@@ -28,6 +28,7 @@ export class GetUserController {
   @Get('users/:userId')
   @ApiOkResponse({ type: GetUserViewModel })
   @ApiNotFoundResponse({ description: 'user not found' })
+  @ApiInternalServerErrorResponse()
   async get (@Param('userId') userId: string): Promise<GetUserViewModel> {
     try {
       const user = await this.getUserUseCase.execute({

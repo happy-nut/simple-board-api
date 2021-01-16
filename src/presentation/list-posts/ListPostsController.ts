@@ -1,4 +1,9 @@
-import { ApiNotFoundResponse, ApiOkResponse, ApiProperty } from '@nestjs/swagger'
+import {
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiProperty
+} from '@nestjs/swagger'
 import {
   Controller,
   Get,
@@ -63,7 +68,8 @@ export class ListPostsController {
     type: Number
   })
   @ApiNotFoundResponse({ description: 'authors not found' })
-  async get (@Query('skip') skip = 0, @Query('take') take = 100): Promise<ListPostsViewModel[]> {
+  @ApiInternalServerErrorResponse()
+  async list (@Query('skip') skip = 0, @Query('take') take = 100): Promise<ListPostsViewModel[]> {
     try {
       const listPosts = await this.listPostsUseCase.execute({ skip, take })
       return _.map(listPosts, (summary) => ({

@@ -1,4 +1,9 @@
-import { ApiConflictResponse, ApiOkResponse, ApiProperty } from '@nestjs/swagger'
+import {
+  ApiConflictResponse,
+  ApiInternalServerErrorResponse,
+  ApiOkResponse,
+  ApiProperty
+} from '@nestjs/swagger'
 import {
   Body,
   ConflictException,
@@ -32,6 +37,7 @@ export class CreateUserController {
   @Post('users')
   @ApiOkResponse({ type: CreateUserViewModel })
   @ApiConflictResponse({ description: 'user already created' })
+  @ApiInternalServerErrorResponse()
   async create (@Body() body: CreateUserBody): Promise<CreateUserViewModel> {
     try {
       const user = await this.createUserUseCase.execute({
