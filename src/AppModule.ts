@@ -7,6 +7,10 @@ import { TypeOrmUserRepository } from './infra/typeorm'
 import { DatabaseModule } from './modules/DatabaseModule'
 import { GetUserController } from './presentation/get-user'
 import { GetUserUseCase } from './application/get-user'
+import { ListPostsController } from './presentation/list-posts'
+import { ListPostsUseCase } from './application/list-posts'
+import { TypeOrmPostRepository } from './infra/typeorm/TypeOrmPostRepository'
+import { POST_REPOSITORY } from './domain/PostRepository'
 
 @Module({
   imports: [
@@ -15,15 +19,21 @@ import { GetUserUseCase } from './application/get-user'
   controllers: [
     HealthzController,
     CreateUserController,
-    GetUserController
+    GetUserController,
+    ListPostsController
   ],
   providers: [
     Logger,
     CreateUserUseCase,
     GetUserUseCase,
+    ListPostsUseCase,
     {
       provide: USER_REPOSITORY,
       useClass: TypeOrmUserRepository
+    },
+    {
+      provide: POST_REPOSITORY,
+      useClass: TypeOrmPostRepository
     }
   ]
 })

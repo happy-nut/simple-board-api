@@ -1,6 +1,8 @@
 import { Post, PostId } from './Post'
 import { UserId } from './UserId'
 
+export const POST_REPOSITORY = Symbol('POST_REPOSITORY')
+
 export interface PostRepository {
   findOneById(id: PostId): Promise<Post | undefined>
 

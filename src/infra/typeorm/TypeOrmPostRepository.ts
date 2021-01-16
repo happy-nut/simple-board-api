@@ -5,7 +5,9 @@ import { PostRepository } from '../../domain/PostRepository'
 import { Post, PostId } from '../../domain/Post'
 import { PostEntity } from './entities'
 import { PostEntityMapper } from './mappers/PostEntityMapper'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class TypeOrmPostRepository implements PostRepository {
   private readonly repository: Repository<PostEntity>
 

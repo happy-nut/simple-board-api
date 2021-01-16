@@ -1,8 +1,9 @@
-import { User, UserRepository } from '../../domain'
+import { User, USER_REPOSITORY, UserRepository } from '../../domain'
 import { UseCase } from '../../shared/ddd'
-import { PostRepository } from '../../domain/PostRepository'
+import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
 import _ from 'lodash'
 import { ListPostsError } from './ListPostsError'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface ListPostsRequest {
   skip?: number
@@ -18,9 +19,12 @@ interface PostSummary {
 
 export type ListPostsResponse = PostSummary[]
 
+@Injectable()
 export class ListPostsUseCase implements UseCase<ListPostsRequest, ListPostsResponse> {
   constructor (
+    @Inject(POST_REPOSITORY)
     private readonly postRepository: PostRepository,
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository
   ) {
   }
