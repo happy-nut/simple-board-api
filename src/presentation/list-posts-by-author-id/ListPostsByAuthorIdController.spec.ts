@@ -63,7 +63,7 @@ describe('ListPostsByAuthorIdController', () => {
     givenUseCaseRejectsWithAuthorNotFoundError()
 
     const response = await request(uut)
-      .get(`/posts?userId=${new UserId().value}`)
+      .get(`/users/${new UserId().value}/posts`)
 
     expect(response.status).toBe(HttpStatus.NOT_FOUND)
   })
@@ -73,7 +73,7 @@ describe('ListPostsByAuthorIdController', () => {
     givenUseCaseRejectsWithUnknownError()
 
     const response = await request(uut)
-      .get(`/posts?userId=${new UserId().value}`)
+      .get(`/users/${new UserId().value}/posts`)
 
     expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR)
     expect(logger.error).toHaveBeenCalled()
@@ -103,7 +103,7 @@ describe('ListPostsByAuthorIdController', () => {
     givenUseCaseResolvesResponse(useCaseResponse)
 
     const response = await request(uut)
-      .get(`/posts?userId=${userId.value}`)
+      .get(`/users/${userId.value}/posts`)
 
     expect(response.status).toBe(HttpStatus.OK)
     expect(response.body).toEqual([

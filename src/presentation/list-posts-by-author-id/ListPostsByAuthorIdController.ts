@@ -12,10 +12,9 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
-  Query
+  Param
 } from '@nestjs/common'
 import _ from 'lodash'
-import { ApiImplicitQuery } from '@nestjs/swagger/dist/decorators/api-implicit-query.decorator'
 import {
   ListPostsByAuthorIdError,
   ListPostsByAuthorIdUseCase
@@ -68,16 +67,11 @@ export class ListPostsByAuthorIdController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('posts')
+  @Get('users/:userId/posts')
   @ApiOkResponse({ type: [ListPostsAuthorIdViewModel] })
-  @ApiImplicitQuery({
-    name: 'userId',
-    required: true,
-    type: String
-  })
   @ApiNotFoundResponse({ description: 'authors not found' })
   @ApiInternalServerErrorResponse()
-  async list (@Query('userId') userId: string): Promise<ListPostsAuthorIdViewModel[]> {
+  async list (@Param('userId') userId: string): Promise<ListPostsAuthorIdViewModel[]> {
     try {
       const posts = await this.listPostsByAuthorIdUseCase.execute({ userId })
       return _.map(posts, (post) => ({
