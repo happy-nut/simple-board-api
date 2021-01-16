@@ -6,7 +6,7 @@ import { UserId } from '../../domain/UserId'
 import { GetUserController } from './GetUserController'
 import { GetUserError, GetUserResponse, GetUserUseCase } from '../../application/get-user'
 
-describe('CreateUserController', () => {
+describe('GetUserController', () => {
   let testingModule: TestingModule
   let app: INestApplication
   let uut: unknown
@@ -55,7 +55,7 @@ describe('CreateUserController', () => {
   })
 
   it('responds 404 NOT_FOUND' +
-    ' when given use case rejected error with USER_ALREADY_CREATED', async () => {
+    ' when given use case rejected error with USER_NOT_FOUND', async () => {
     const id = new UserId().value
     givenUseCaseRejectsWithUserNotFoundError()
 

@@ -5,7 +5,8 @@ import {
   HttpCode,
   HttpStatus,
   InternalServerErrorException,
-  Logger, NotFoundException,
+  Logger,
+  NotFoundException,
   Param
 } from '@nestjs/common'
 import { UserViewModel } from '../UserViewModel'
