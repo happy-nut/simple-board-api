@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing'
 import request from 'supertest'
 import { HttpStatus, INestApplication, Logger } from '@nestjs/common'
 import { mock, MockProxy } from 'jest-mock-extended'
-import { UserId } from '../../domain/UserId'
 import { ListPostsController } from './ListPostsController'
 import { ListPostsError, ListPostsResponse, ListPostsUseCase } from '../../application/list-posts'
 

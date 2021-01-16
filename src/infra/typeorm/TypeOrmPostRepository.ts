@@ -15,7 +15,7 @@ export class TypeOrmPostRepository implements PostRepository {
     this.repository = this.connection.getRepository(PostEntity)
   }
 
-  async findAll (skip = 0, take = 100): Promise<Post[]> {
+  async findAll (skip: number, take: number): Promise<Post[]> {
     if (skip < 0 || take <= 0) {
       return []
     }

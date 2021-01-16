@@ -6,8 +6,8 @@ import { ListPostsError } from './ListPostsError'
 import { Inject, Injectable } from '@nestjs/common'
 
 interface ListPostsRequest {
-  skip?: number
-  take?: number
+  skip: number
+  take: number
 }
 
 interface PostSummary {
