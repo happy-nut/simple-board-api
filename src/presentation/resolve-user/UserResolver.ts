@@ -1,6 +1,6 @@
 import { Args, Field, ObjectType, Query, Resolver } from '@nestjs/graphql'
 import { GetUserError, GetUserUseCase } from '../../application/get-user'
-import { InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common'
+import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
 
 interface UserViewModelProps {

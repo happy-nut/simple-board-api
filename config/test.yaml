@@ -7,3 +7,6 @@ typeorm:
   password: Mm6SkgR7wFl42s$I
   database: simple_board_test
   synchronize: true
+graphql:
+  playground: false
+  # TODO: Find a way to disable error logging from test.

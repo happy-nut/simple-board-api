@@ -7,3 +7,5 @@ typeorm:
   password: sQa%UNffrRxsbOVc
   database: simple_board_local
   synchronize: true
+graphql:
+  playground: true

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import path from 'path'
 import { DateScalar } from './scalars'
+import config from 'config'
 
 @Module({
   exports: [
@@ -10,7 +11,8 @@ import { DateScalar } from './scalars'
   imports: [
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
-      autoSchemaFile: path.join(__dirname, 'schema.gql')
+      autoSchemaFile: path.join(__dirname, 'schema.gql'),
+      ...config.get('graphql')
     })
   ],
   providers: [
