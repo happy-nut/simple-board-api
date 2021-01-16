@@ -6,7 +6,7 @@ import { Post, PostId } from '../../domain/Post'
 import { GetPostError } from './GetPostError'
 import { createDummyPost, createDummyUser } from '../../../test/support/utils'
 
-describe('GetUserUseCase', () => {
+describe('GetPostUseCase', () => {
   let userRepository: MockProxy<UserRepository>
   let postRepository: MockProxy<PostRepository>
   let uut: GetPostUseCase

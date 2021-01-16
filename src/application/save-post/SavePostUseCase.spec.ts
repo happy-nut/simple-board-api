@@ -93,7 +93,7 @@ describe('SavePostUseCase', () => {
     ))
   })
 
-  it('responses nothing and creates a post when ID is not given', async () => {
+  it('responds nothing and creates a post when ID is not given', async () => {
     const title = 'test-title'
     const content = 'test-content'
     const authorId = new UserId('test-user-id')
@@ -162,7 +162,7 @@ describe('SavePostUseCase', () => {
     expect(postRepository.findOneById).toHaveBeenCalledWith(new PostId('test-post-id'))
   })
 
-  it('responses nothing and updates a post when ID is given', async () => {
+  it('responds nothing and updates a post when ID is given', async () => {
     const authorId = new UserId('test-user-id')
     givenUserRepositoryFindOneByIdResolvesUser(User.create(
       {

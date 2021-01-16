@@ -5,11 +5,11 @@ import { PostId } from '../../domain/Post'
 import { GetPostError } from './GetPostError'
 import { UserRepository } from '../../domain'
 
-interface GetUserRequest {
+interface GetPostRequest {
   id: string
 }
 
-export interface GetUserResponse {
+export interface GetPostResponse {
   id: string
   authorId: string
   authorName: string
@@ -18,14 +18,14 @@ export interface GetUserResponse {
   createdAt: Date
 }
 
-export class GetPostUseCase implements UseCase<GetUserRequest, GetUserResponse> {
+export class GetPostUseCase implements UseCase<GetPostRequest, GetPostResponse> {
   constructor (
     private readonly postRepository: PostRepository,
     private readonly userRepository: UserRepository
   ) {
   }
 
-  async execute (request: GetUserRequest): Promise<GetUserResponse> {
+  async execute (request: GetPostRequest): Promise<GetPostResponse> {
     const postId = new PostId(request.id)
     const post = await this.postRepository.findOneById(postId)
     if (_.isNil(post)) {

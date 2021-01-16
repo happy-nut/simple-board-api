@@ -21,7 +21,7 @@ describe('CreateUserUseCase', () => {
     uut = new CreateUserUseCase(userRepository)
   })
 
-  it('responses with a user', async () => {
+  it('responds with a user', async () => {
     const name = 'test-name'
     givenRepositorySaveResolvesUser(User.create(
       {

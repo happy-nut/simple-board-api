@@ -34,7 +34,7 @@ describe('GetUserUseCase', () => {
     expect(userRepository.findOneById).toHaveBeenCalled()
   })
 
-  it('responses with a user when given repository findById resolves a user', async () => {
+  it('responds with a user when given repository findById resolves a user', async () => {
     const id = new UserId()
     const name = 'test-name'
     const registeredAt = new Date()

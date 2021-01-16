@@ -34,7 +34,7 @@ describe('DeletePostUseCase', () => {
     expect(postRepository.findOneById).toHaveBeenCalledWith(new PostId(POST_ID))
   })
 
-  it('responses nothing when given repository resolves a post', async () => {
+  it('responds nothing when given repository resolves a post', async () => {
     const post = Post.create(
       {
         title: 'test-title',

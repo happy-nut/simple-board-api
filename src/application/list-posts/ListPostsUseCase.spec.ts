@@ -55,10 +55,10 @@ describe('ListPostsUseCase', () => {
     uut = new ListPostsUseCase(postRepository, userRepository)
   })
 
-  it('responses empty list when given post repository resolves empty list', async () => {
+  it('responds empty list when given post repository resolves empty list', async () => {
     givenPostRepositoryFindAllResolvesEmptyList()
 
-    const result = await uut.execute({})
+    const result = await uut.execute({ skip: 0, take: 100 })
 
     expect(postRepository.findAll).toHaveBeenCalled()
     expect(result).toEqual([])
@@ -77,7 +77,7 @@ describe('ListPostsUseCase', () => {
     expect(userRepository.findAllByIds).toHaveBeenCalled()
   })
 
-  it('responses posts', async () => {
+  it('responds posts', async () => {
     const posts = createGivenNumberOfPosts(2)
     givenPostRepositoryFindAllResolvesPosts(posts)
     const users = createGivenNumberOfUsers(2)

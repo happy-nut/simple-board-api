@@ -102,7 +102,7 @@ describe('UserResolver', () => {
   })
 
   describe('.get()', () => {
-    it('responses with errors when user of given ID does not exist', async () => {
+    it('responds with errors when user of given ID does not exist', async () => {
       givenGetUseCaseRejectedWithUserNotFoundError()
       const userId = new UserId().value
       const query = createUserQuery(userId)
@@ -122,7 +122,7 @@ describe('UserResolver', () => {
       }))
     })
 
-    it('responses with errors and logs when user of given ID does not exist', async () => {
+    it('responds with errors and logs when user of given ID does not exist', async () => {
       givenGetUseCaseRejectedWithUnknownError()
       const userId = new UserId().value
       const query = createUserQuery(userId)
@@ -141,7 +141,7 @@ describe('UserResolver', () => {
       expect(logger.error).toHaveBeenCalled()
     })
 
-    it('responses with a user when user of given ID exists', async () => {
+    it('responds with a user when user of given ID exists', async () => {
       const user = User.createNew({ name: 'test-name' })
       const getUserResponse = {
         id: user.id.value,
@@ -172,7 +172,7 @@ describe('UserResolver', () => {
   })
 
   describe('.create()', () => {
-    it('responses error when given user case rejected with userCreatingFailed error', async () => {
+    it('responds error when given user case rejected with userCreatingFailed error', async () => {
       givenCreateUseCaseRejectedWithUserCreatingFailedError()
       const input: CreateUserInput = {
         name: 'test-user-name'
@@ -196,7 +196,7 @@ describe('UserResolver', () => {
       }))
     })
 
-    it('responses error and logs when given user case rejected with unknown error', async () => {
+    it('responds error and logs when given user case rejected with unknown error', async () => {
       givenCreateUseCaseRejectedWithUnknownError()
       const input: CreateUserInput = {
         name: 'test-user-name'
@@ -219,7 +219,7 @@ describe('UserResolver', () => {
       expect(logger.error).toHaveBeenCalled()
     })
 
-    it('responses a user and logs when given user case resolved', async () => {
+    it('responds a user and logs when given user case resolved', async () => {
       const userId = new UserId().value
       const name = 'test-user-name'
       const registeredAt = new Date()
