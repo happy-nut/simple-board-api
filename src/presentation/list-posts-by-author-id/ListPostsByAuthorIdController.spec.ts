@@ -8,7 +8,7 @@ import {
 } from '../../application/list-posts-by-author-id'
 import { ListPostsByAuthorIdController } from './ListPostsByAuthorIdController'
 import { UserId } from '../../domain/UserId'
-import { createPostsOrderByCreatedAt } from '../../../test/support/utils/createPostsOrderByCreatedAt'
+import { createDummyPostsOrderByCreatedAt } from '../../../test/support/utils/createDummyPostsOrderByCreatedAt'
 
 describe('ListPostsByAuthorIdController', () => {
   let testingModule: TestingModule
@@ -81,7 +81,7 @@ describe('ListPostsByAuthorIdController', () => {
 
   it('responds 200 OK when given use case resolved a user', async () => {
     const userId = new UserId()
-    const posts = createPostsOrderByCreatedAt(2, userId)
+    const posts = createDummyPostsOrderByCreatedAt(2, userId)
     const useCaseResponse: ListPostsByAuthorIdResponse = [
       {
         createdAt: posts[0].createdAt,

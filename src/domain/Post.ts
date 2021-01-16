@@ -4,7 +4,7 @@ import { UserId } from './UserId'
 export class PostId extends EntityId {
 }
 
-interface PostProps {
+export interface PostProps {
   authorId: UserId
   title: string
   content: string

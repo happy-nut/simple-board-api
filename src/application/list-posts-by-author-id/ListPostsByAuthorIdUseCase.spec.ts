@@ -6,8 +6,8 @@ import { ListPostsByAuthorIdUseCase } from './ListPostsByAuthorIdUseCase'
 import { UserId } from '../../domain/UserId'
 import { ListPostsByAuthorIdError } from './ListPostsByAuthorIdError'
 import {
-  createPostsOrderByCreatedAt
-} from '../../../test/support/utils/createPostsOrderByCreatedAt'
+  createDummyPostsOrderByCreatedAt
+} from '../../../test/support/utils/createDummyPostsOrderByCreatedAt'
 
 describe('ListPostsByAuthorIdUseCase', () => {
   let userRepository: MockProxy<UserRepository>
@@ -76,7 +76,7 @@ describe('ListPostsByAuthorIdUseCase', () => {
       userId
     )
     givenUserRepositoryFindAllByIdsResolvesUser(user)
-    const posts = createPostsOrderByCreatedAt(2, userId)
+    const posts = createDummyPostsOrderByCreatedAt(2, userId)
     givenPostRepositoryFindAllResolvesPosts(posts)
 
     const response = await uut.execute({ userId: userId.value })

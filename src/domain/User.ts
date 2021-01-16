@@ -1,7 +1,7 @@
 import { AggregateRoot } from '../shared/ddd'
 import { UserId } from './UserId'
 
-interface Props {
+export interface UserProps {
   name: string
   registeredAt: Date
 }
@@ -10,8 +10,8 @@ interface CreateNewProps {
   name: string
 }
 
-export class User extends AggregateRoot<Props> {
-  static create (props: Props, id: UserId): User {
+export class User extends AggregateRoot<UserProps> {
+  static create (props: UserProps, id: UserId): User {
     return new User({ ...props }, id)
   }
 

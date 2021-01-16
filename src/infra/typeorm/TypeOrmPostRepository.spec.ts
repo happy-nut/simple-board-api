@@ -7,8 +7,8 @@ import _ from 'lodash'
 import { PostEntity } from './entities'
 import { DatabaseModule } from '../../modules'
 import {
-  createPostsOrderByCreatedAt
-} from '../../../test/support/utils/createPostsOrderByCreatedAt'
+  createDummyPostsOrderByCreatedAt
+} from '../../../test/support/utils/createDummyPostsOrderByCreatedAt'
 
 describe('TypeOrmPostRepository', () => {
   let connection: Connection
@@ -16,7 +16,7 @@ describe('TypeOrmPostRepository', () => {
   let uut: TypeOrmPostRepository
 
   async function whenGivenNumberOfPostsSaved (numberOfPosts: number): Promise<void> {
-    const posts = createPostsOrderByCreatedAt(numberOfPosts)
+    const posts = createDummyPostsOrderByCreatedAt(numberOfPosts)
      await Promise.all(_.map(posts, async (post) => {
        await uut.save(post)
      }))
@@ -117,10 +117,10 @@ describe('TypeOrmPostRepository', () => {
   describe('.findAllByUserId', () => {
     it('finds posts with given user ID', async () => {
       const userId = new UserId('test-user-id')
-      const posts = createPostsOrderByCreatedAt(2, userId)
+      const posts = createDummyPostsOrderByCreatedAt(2, userId)
       await uut.save(posts[0])
       await uut.save(posts[1])
-      const postByOtherUser = createPostsOrderByCreatedAt(1)
+      const postByOtherUser = createDummyPostsOrderByCreatedAt(1)
       await uut.save(postByOtherUser[0])
 
       const founds = await uut.findAllByUserId(userId)
