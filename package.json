@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build -p ./tsconfig.build.json",
     "prestart": "rimraf dist",
-    "start": "nest start",
+    "start": "nest start --watch",
     "lint": "eslint \"{src,test}/**/*.{ts,(i-)?spec.ts,js}\" --fix --color",
     "test": "jest --runInBand",
     "test:watch": "yarn test --watch",
