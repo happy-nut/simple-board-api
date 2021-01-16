@@ -13,17 +13,49 @@ DB는 RDB/NoSQL 어떤 것을 이용해도 됩니다. firebase처럼 serverless 
 
 ## Specs
 
-모델은 User(작성자), Post(게시물), Comment(댓글)가 존재합니다. 모든 모델은 기본적으로 CRUD가 가능해야 합니다.
-이하의 모델에 따라 임의의 데이터를 미리 DB에 적재하여 사용하세요. 필요한 경우 모델을 수정하거나 추가하세요.
+모델은 User(작성자), Post(게시물), Comment(댓글)가 존재합니다. 모든 모델은 기본적으로 CRUD가 가능해야 합니다. 이하의 모델에 따라 임의의 데이터를 미리 DB에 적재하여 사용하세요. 필요한 경우 모델을 수정하거나 추가하세요.
 
-- [ ] Post는 여러 Comment를 가질 수 있습니다. (1:N). ID, 작성자, 제목, 내용, 작성일을 가집니다.
+1. Post는 여러 Comment를 가질 수 있습니다. (1:N). ID, 작성자, 제목, 내용, 작성일을 가집니다.
+2. Comment는 ID, 작성자, 내용, 작성일을 가집니다.
+3. User는 여러 Post를 가질 수 있습니다 (1:N), 여러 Comment를 가질 수 있습니다. (1:N), ID, 이름, 가입일을 가집니다.
+4. User는 삭제/업데이트가 불가능 합니다.
+5. 특정 User가 작성한 모든 Post를 조회할 수 있어야 합니다.
+6. 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
+7. 특정 Post에 달린 Comment를 조회할 수 있어야 하며, 페이지네이션이 가능하여야 합니다.
+8. Post와 Comment는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
+
+## Specs 진행 상황
+
+### Model Specs
+
+- [x] Post는 ID, 작성자, 제목, 내용, 작성일을 가집니다.
+- [ ] Post는 여러 Comment를 가질 수 있습니다. (1:N).
 - [ ] Comment는 ID, 작성자, 내용, 작성일을 가집니다.
-- [ ] User는 여러 Post를 가질 수 있습니다 (1:N), 여러 Comment를 가질 수 있습니다. (1:N), ID, 이름, 가입일을 가집니다.
-- [x] User는 삭제/업데이트가 불가능 합니다.
+- [x] User는 이름, 가입일을 가집니다.
+- [x] User는 여러 Post를 가질 수 있습니다. (1:N)
+- [ ] User는 여러 Comment를 가질 수 있습니다. (1:N)
+- [x] Post는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
+- [ ] Comment는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
+
+### API Specs
+
+#### REST
+
+- [x] User CR 가능
+- [x] Post CRUD 가능
+- [ ] Comment CRUD 가능
 - [ ] 특정 User가 작성한 모든 Post를 조회할 수 있어야 합니다.
 - [ ] 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
 - [ ] 특정 Post에 달린 Comment를 조회할 수 있어야 하며, 페이지네이션이 가능하여야 합니다.
-- [ ] Post와 Comment는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
+
+#### GraphQL API
+
+- [x] User CR 가능
+- [ ] Post CRUD 가능
+- [ ] Comment CRUD 가능
+- [ ] 특정 User가 작성한 모든 Post를 조회할 수 있어야 합니다.
+- [ ] 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
+- [ ] 특정 Post에 달린 Comment를 조회할 수 있어야 하며, 페이지네이션이 가능하여야 합니다.
 
 ## Prerequisite - 필수 요구 사항
 
