@@ -2,11 +2,12 @@ import { AppModule } from './AppModule'
 import { Test, TestingModule } from '@nestjs/testing'
 import { HealthzController } from './presentation/healthz/healthzController'
 import { CreateUserController } from './presentation/create-user'
-import { DatabaseModule } from './modules/DatabaseModule'
 import { GetUserController } from './presentation/get-user'
 import { ListPostsController } from './presentation/list-posts'
 import { SavePostController } from './presentation/save-post'
 import { DeletePostController } from './presentation/delete-post'
+import { DatabaseModule, GraphQueryLanguageModule } from './modules'
+import { UserResolver } from './presentation/resolve-user'
 
 describe('AppModule', () => {
   let uut: TestingModule
@@ -25,6 +26,10 @@ describe('AppModule', () => {
 
   it('gets DatabaseModule', () => {
     expect(uut.get(DatabaseModule)).toBeInstanceOf(DatabaseModule)
+  })
+
+  it('gets GraphQueryLanguageModule', () => {
+    expect(uut.get(GraphQueryLanguageModule)).toBeInstanceOf(GraphQueryLanguageModule)
   })
 
   it('gets HealthzController', () => {
@@ -49,5 +54,9 @@ describe('AppModule', () => {
 
   it('gets DeletePostController', () => {
     expect(uut.get(DeletePostController)).toBeInstanceOf(DeletePostController)
+  })
+
+  it('gets UserResolver', () => {
+    expect(uut.get(UserResolver)).toBeInstanceOf(UserResolver)
   })
 })

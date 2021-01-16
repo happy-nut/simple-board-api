@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { Connection } from 'typeorm'
-import { DatabaseModule } from './database/DatabaseModule'
-
+import { DatabaseModule } from './DatabaseModule'
 
 describe('DatabaseModule', () => {
   let uut: TestingModule

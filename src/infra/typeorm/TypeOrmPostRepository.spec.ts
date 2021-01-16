@@ -1,11 +1,11 @@
 import { Connection } from 'typeorm'
 import { UserId } from '../../domain/UserId'
 import { Test, TestingModule } from '@nestjs/testing'
-import { DatabaseModule } from '../../modules/DatabaseModule'
 import { Post, PostId } from '../../domain/Post'
 import { TypeOrmPostRepository } from './TypeOrmPostRepository'
 import _ from 'lodash'
 import { PostEntity } from './entities'
+import { DatabaseModule } from '../../modules/database/DatabaseModule'
 
 describe('TypeOrmPostRepository', () => {
   let connection: Connection

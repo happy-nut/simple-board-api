@@ -3,10 +3,10 @@ import { User } from '../../domain'
 import { UserId } from '../../domain/UserId'
 import { TypeOrmUserRepository } from './TypeOrmUserRepository'
 import { Test, TestingModule } from '@nestjs/testing'
-import { DatabaseModule } from '../../modules/DatabaseModule'
 import { UserEntity } from './entities'
 import _ from 'lodash'
 import { Users } from '../../domain/Users'
+import { DatabaseModule } from '../../modules/database/DatabaseModule'
 
 describe('TypeOrmUserRepository', () => {
   let connection: Connection
