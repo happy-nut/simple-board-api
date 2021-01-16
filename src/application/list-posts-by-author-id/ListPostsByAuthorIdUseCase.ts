@@ -1,7 +1,8 @@
-import { UserRepository } from '../../domain'
+import { USER_REPOSITORY, UserRepository } from '../../domain'
 import { UseCase } from '../../shared/ddd'
-import { PostRepository } from '../../domain/PostRepository'
+import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
 import _ from 'lodash'
+import { Inject, Injectable } from '@nestjs/common'
 import { ListPostsByAuthorIdError } from './ListPostsByAuthorIdError'
 import { UserId } from '../../domain/UserId'
 
@@ -20,10 +21,13 @@ interface Post {
 
 export type ListPostsByAuthorIdResponse = Post[]
 
+@Injectable()
 export class ListPostsByAuthorIdUseCase
 implements UseCase<ListPostsByAuthorIdRequest, ListPostsByAuthorIdResponse> {
   constructor (
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(POST_REPOSITORY)
     private readonly postRepository: PostRepository
   ) {
   }

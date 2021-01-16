@@ -16,6 +16,8 @@ import { DeletePostController } from './presentation/delete-post'
 import { DeletePostUseCase } from './application/delete-post'
 import { DatabaseModule, GraphQueryLanguageModule } from './modules'
 import { UserResolver } from './presentation/resolve-user'
+import { ListPostsByAuthorIdController } from './presentation/list-posts-by-author-id'
+import { ListPostsByAuthorIdUseCase } from './application/list-posts-by-author-id'
 
 @Module({
   imports: [
@@ -28,7 +30,8 @@ import { UserResolver } from './presentation/resolve-user'
     GetUserController,
     ListPostsController,
     SavePostController,
-    DeletePostController
+    DeletePostController,
+    ListPostsByAuthorIdController
   ],
   providers: [
     Logger,
@@ -37,6 +40,7 @@ import { UserResolver } from './presentation/resolve-user'
     ListPostsUseCase,
     SavePostUseCase,
     DeletePostUseCase,
+    ListPostsByAuthorIdUseCase,
     UserResolver,
     {
       provide: USER_REPOSITORY,
