@@ -5,6 +5,7 @@ import { CreateUserController } from './presentation/create-user'
 import { DatabaseModule } from './modules/DatabaseModule'
 import { GetUserController } from './presentation/get-user'
 import { ListPostsController } from './presentation/list-posts'
+import { SavePostController } from './presentation/save-post'
 
 describe('AppModule', () => {
   let uut: TestingModule
@@ -39,5 +40,9 @@ describe('AppModule', () => {
 
   it('gets ListPostsController', () => {
     expect(uut.get(ListPostsController)).toBeInstanceOf(ListPostsController)
+  })
+
+  it('gets SavePostController', () => {
+    expect(uut.get(SavePostController)).toBeInstanceOf(SavePostController)
   })
 })

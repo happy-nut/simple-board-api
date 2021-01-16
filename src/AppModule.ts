@@ -11,6 +11,8 @@ import { ListPostsController } from './presentation/list-posts'
 import { ListPostsUseCase } from './application/list-posts'
 import { TypeOrmPostRepository } from './infra/typeorm/TypeOrmPostRepository'
 import { POST_REPOSITORY } from './domain/PostRepository'
+import { SavePostController } from './presentation/save-post'
+import { SavePostUseCase } from './application/save-post'
 
 @Module({
   imports: [
@@ -20,13 +22,15 @@ import { POST_REPOSITORY } from './domain/PostRepository'
     HealthzController,
     CreateUserController,
     GetUserController,
-    ListPostsController
+    ListPostsController,
+    SavePostController
   ],
   providers: [
     Logger,
     CreateUserUseCase,
     GetUserUseCase,
     ListPostsUseCase,
+    SavePostUseCase,
     {
       provide: USER_REPOSITORY,
       useClass: TypeOrmUserRepository

@@ -2,9 +2,10 @@ import _ from 'lodash'
 import { UseCase } from '../../shared/ddd'
 import { Post, PostId } from '../../domain/Post'
 import { UserId } from '../../domain/UserId'
-import { PostRepository } from '../../domain/PostRepository'
+import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
 import { SavePostError } from './SavePostError'
-import { UserRepository } from '../../domain'
+import { USER_REPOSITORY, UserRepository } from '../../domain'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface SavePostRequest {
   id?: string
@@ -15,9 +16,12 @@ interface SavePostRequest {
 
 export type SavePostResponse = void
 
+@Injectable()
 export class SavePostUseCase implements UseCase<SavePostRequest, SavePostResponse> {
   constructor (
+    @Inject(POST_REPOSITORY)
     private readonly postRepository: PostRepository,
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository
   ) {
   }
