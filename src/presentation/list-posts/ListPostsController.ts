@@ -62,7 +62,7 @@ export class ListPostsController {
     type: Number
   })
   @ApiImplicitQuery({
-    name: 'limit',
+    name: 'take',
     required: false,
     type: Number
   })

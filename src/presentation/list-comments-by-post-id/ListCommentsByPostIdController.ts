@@ -71,7 +71,7 @@ export class ListCommentsByPostIdController {
     type: Number
   })
   @ApiImplicitQuery({
-    name: 'limit',
+    name: 'take',
     required: false,
     type: Number
   })
