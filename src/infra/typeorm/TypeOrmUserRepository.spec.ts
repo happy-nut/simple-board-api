@@ -4,9 +4,8 @@ import { UserId } from '../../domain/UserId'
 import { TypeOrmUserRepository } from './TypeOrmUserRepository'
 import { Test, TestingModule } from '@nestjs/testing'
 import { UserEntity } from './entities'
-import _ from 'lodash'
 import { Users } from '../../domain/Users'
-import { DatabaseModule } from '../../modules/database/DatabaseModule'
+import { DatabaseModule } from '../../modules'
 
 describe('TypeOrmUserRepository', () => {
   let connection: Connection
