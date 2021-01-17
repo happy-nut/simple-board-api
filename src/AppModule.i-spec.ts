@@ -10,6 +10,7 @@ import { DatabaseModule, GraphQueryLanguageModule } from './modules'
 import { UserResolver } from './presentation/resolve-user'
 import { ListPostsByAuthorIdController } from './presentation/list-posts-by-author-id'
 import { GetPostController } from './presentation/get-post'
+import { SaveCommentController } from './presentation/save-comment'
 
 describe('AppModule', () => {
   let uut: TestingModule
@@ -64,6 +65,10 @@ describe('AppModule', () => {
 
   it('gets GetPostController', () => {
     expect(uut.get(GetPostController)).toBeInstanceOf(GetPostController)
+  })
+
+  it('gets SaveCommentController', () => {
+    expect(uut.get(SaveCommentController)).toBeInstanceOf(SaveCommentController)
   })
 
   it('gets UserResolver', () => {

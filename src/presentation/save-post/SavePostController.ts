@@ -83,7 +83,7 @@ export class SavePostController {
   @HttpCode(HttpStatus.OK)
   @Put('posts/:postId')
   @ApiOkResponse()
-  @ApiNotFoundResponse({ description: 'author not found or post not found(If post ID is given)' })
+  @ApiNotFoundResponse({ description: 'author or post not found' })
   @ApiInternalServerErrorResponse()
   async update (
     @Param('postId') postId: string,

@@ -3,12 +3,15 @@ import { HealthzController } from './presentation/healthz/healthzController'
 import { CreateUserController } from './presentation/create-user'
 import { CreateUserUseCase } from './application/create-user'
 import { USER_REPOSITORY } from './domain'
-import { TypeOrmUserRepository } from './infra/typeorm'
+import {
+  TypeOrmCommentRepository,
+  TypeOrmPostRepository,
+  TypeOrmUserRepository
+} from './infra/typeorm'
 import { GetUserController } from './presentation/get-user'
 import { GetUserUseCase } from './application/get-user'
 import { ListPostsController } from './presentation/list-posts'
 import { ListPostsUseCase } from './application/list-posts'
-import { TypeOrmPostRepository } from './infra/typeorm/TypeOrmPostRepository'
 import { POST_REPOSITORY } from './domain/PostRepository'
 import { SavePostController } from './presentation/save-post'
 import { SavePostUseCase } from './application/save-post'
@@ -20,6 +23,9 @@ import { ListPostsByAuthorIdController } from './presentation/list-posts-by-auth
 import { ListPostsByAuthorIdUseCase } from './application/list-posts-by-author-id'
 import { GetPostController } from './presentation/get-post'
 import { GetPostUseCase } from './application/get-post'
+import { SaveCommentController } from './presentation/save-comment'
+import { SaveCommentUseCase } from './application/save-comment'
+import { COMMENT_REPOSITORY } from './domain/CommentRepository'
 
 @Module({
   imports: [
@@ -34,7 +40,8 @@ import { GetPostUseCase } from './application/get-post'
     SavePostController,
     DeletePostController,
     ListPostsByAuthorIdController,
-    GetPostController
+    GetPostController,
+    SaveCommentController
   ],
   providers: [
     Logger,
@@ -45,6 +52,7 @@ import { GetPostUseCase } from './application/get-post'
     DeletePostUseCase,
     ListPostsByAuthorIdUseCase,
     GetPostUseCase,
+    SaveCommentUseCase,
     UserResolver,
     {
       provide: USER_REPOSITORY,
@@ -53,6 +61,10 @@ import { GetPostUseCase } from './application/get-post'
     {
       provide: POST_REPOSITORY,
       useClass: TypeOrmPostRepository
+    },
+    {
+      provide: COMMENT_REPOSITORY,
+      useClass: TypeOrmCommentRepository
     }
   ]
 })

@@ -9,7 +9,7 @@ import path from 'path'
     TypeOrmModule.forRoot({
       ...config.get<ConnectionOptions>('typeorm'),
       entities: [
-        path.join(__dirname, '../../**/entities/*Entity.ts')
+        path.join(__dirname, '../../**/entities/*Entity.{j,t}s')
       ]
     })
   ]

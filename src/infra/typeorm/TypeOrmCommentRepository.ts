@@ -5,7 +5,9 @@ import { Comment } from '../../domain/Comment'
 import { CommentEntity } from './entities'
 import { CommentEntityMapper } from './mappers'
 import { CommentId } from '../../domain/CommentId'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class TypeOrmCommentRepository implements CommentRepository {
   private readonly repository: Repository<CommentEntity>
 

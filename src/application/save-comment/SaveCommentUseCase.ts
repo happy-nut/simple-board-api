@@ -3,11 +3,12 @@ import { UseCase } from '../../shared/ddd'
 import { Comment } from '../../domain/Comment'
 import { UserId } from '../../domain/UserId'
 import { SaveCommentError } from './SaveCommentError'
-import { UserRepository } from '../../domain'
+import { USER_REPOSITORY, UserRepository } from '../../domain'
 import { PostId } from '../../domain/PostId'
-import { CommentRepository } from '../../domain/CommentRepository'
-import { PostRepository } from '../../domain/PostRepository'
+import { COMMENT_REPOSITORY, CommentRepository } from '../../domain/CommentRepository'
+import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
 import { CommentId } from '../../domain/CommentId'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface SaveCommentRequest {
   id?: string
@@ -20,10 +21,14 @@ export interface SaveCommentResponse {
   commentId: string
 }
 
+@Injectable()
 export class SaveCommentUseCase implements UseCase<SaveCommentRequest, SaveCommentResponse> {
   constructor (
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(POST_REPOSITORY)
     private readonly postRepository: PostRepository,
+    @Inject(COMMENT_REPOSITORY)
     private readonly commentRepository: CommentRepository
   ) {
   }

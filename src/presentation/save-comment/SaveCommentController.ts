@@ -53,7 +53,7 @@ export class SaveCommentController {
   @HttpCode(HttpStatus.OK)
   @Post('comments')
   @ApiOkResponse({ type: SaveCommentViewModel })
-  @ApiNotFoundResponse({ description: 'author of post not found' })
+  @ApiNotFoundResponse({ description: 'author or post not found' })
   @ApiInternalServerErrorResponse()
   async create (@Body() body: SaveCommentBody): Promise<SaveCommentViewModel> {
     try {
