@@ -9,6 +9,8 @@ import { Inject, Injectable } from '@nestjs/common'
 
 interface ListCommentsByPostIdRequest {
   postId: string
+  skip: number
+  take: number
 }
 
 interface Comment {
@@ -35,14 +37,14 @@ implements UseCase<ListCommentsByPostIdRequest, ListCommentsByPostIdResponse> {
   }
 
   async execute (request: ListCommentsByPostIdRequest): Promise<ListCommentsByPostIdResponse> {
-    const { postId: postIdString } = request
+    const { postId: postIdString, skip, take } = request
     const postId = new PostId(postIdString)
     const post = await this.postRepository.findOneById(postId)
     if (_.isNil(post)) {
       throw ListCommentsByPostIdError.postNotFound()
     }
 
-    const comments = await this.commentRepository.findAllByPostId(postId)
+    const comments = await this.commentRepository.findAllByPostId(postId, skip, take)
     if (_.isEmpty(comments)) {
       return []
     }

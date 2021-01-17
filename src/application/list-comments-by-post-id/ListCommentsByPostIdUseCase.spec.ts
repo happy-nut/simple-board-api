@@ -47,7 +47,7 @@ describe('ListCommentsByPostIdUseCase', () => {
     givenPostRepositoryFindAllByIdsResolvedUndefined()
     const postId = new PostId()
 
-    await expect(uut.execute({ postId: postId.value }))
+    await expect(uut.execute({ postId: postId.value, skip: 0, take: 100 }))
       .rejects
       .toThrowError(ListCommentsByPostIdError.postNotFound())
     expect(postRepository.findOneById).toHaveBeenCalledWith(postId)
@@ -58,11 +58,11 @@ describe('ListCommentsByPostIdUseCase', () => {
     givenPostRepositoryFindAllByIdsResolvedPost(post)
     givenCommentRepositoryFindAllByPostIdResolvedComments([])
 
-    const response = await uut.execute({ postId: post.id.value })
+    const response = await uut.execute({ postId: post.id.value, skip: 0, take: 100 })
 
     expect(response).toEqual([])
     expect(postRepository.findOneById).toHaveBeenCalledWith(post.id)
-    expect(commentRepository.findAllByPostId).toHaveBeenCalledWith(post.id)
+    expect(commentRepository.findAllByPostId).toHaveBeenCalledWith(post.id, 0, 100)
   })
 
   it('returns comment list when given comment repository resolves comments', async () => {
@@ -73,10 +73,10 @@ describe('ListCommentsByPostIdUseCase', () => {
     givenCommentRepositoryFindAllByPostIdResolvedComments(comments)
     givenUserRepositoryFindAllByIdsResolvedUsers(new Users([user]))
 
-    const response = await uut.execute({ postId: post.id.value })
+    const response = await uut.execute({ postId: post.id.value, skip: 0, take: 100 })
 
     expect(postRepository.findOneById).toHaveBeenCalledWith(post.id)
-    expect(commentRepository.findAllByPostId).toHaveBeenCalledWith(post.id)
+    expect(commentRepository.findAllByPostId).toHaveBeenCalledWith(post.id, 0, 100)
     expect(response).toEqual([
       {
         id: comments[0].id.value,

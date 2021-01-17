@@ -12,13 +12,15 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
-  Param
+  Param,
+  Query
 } from '@nestjs/common'
 import _ from 'lodash'
 import {
   ListCommentsByPostIdError,
   ListCommentsByPostIdUseCase
 } from '../../application/list-comments-by-post-id'
+import { ApiImplicitQuery } from '@nestjs/swagger/dist/decorators/api-implicit-query.decorator'
 
 interface ListCommentsByPostIdViewModelProps {
   id: string
@@ -63,12 +65,26 @@ export class ListCommentsByPostIdController {
 
   @HttpCode(HttpStatus.OK)
   @Get('posts/:postId/comments')
+  @ApiImplicitQuery({
+    name: 'skip',
+    required: false,
+    type: Number
+  })
+  @ApiImplicitQuery({
+    name: 'limit',
+    required: false,
+    type: Number
+  })
   @ApiOkResponse({ type: [ListCommentsByPostIdViewModel] })
   @ApiNotFoundResponse({ description: 'post not found' })
   @ApiInternalServerErrorResponse()
-  async list (@Param('postId') postId: string): Promise<ListCommentsByPostIdViewModel[]> {
+  async list (
+    @Param('postId') postId: string,
+    @Query('skip') skip = 0,
+    @Query('take') take = 100
+  ): Promise<ListCommentsByPostIdViewModel[]> {
     try {
-      const responses = await this.ListCommentsByPostIdUseCase.execute({ postId })
+      const responses = await this.ListCommentsByPostIdUseCase.execute({ postId, skip, take })
       return _.map(responses, (response) => ({
         id: response.id,
         content: response.content,
