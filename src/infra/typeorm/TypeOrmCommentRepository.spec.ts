@@ -11,6 +11,7 @@ import {
   createDummyPostsOrderByCreatedAt
 } from '../../../test/support/utils'
 import { UserId } from '../../domain/UserId'
+import { PostId } from '../../domain/PostId'
 
 describe('TypeOrmCommentRepository', () => {
   let connection: Connection
@@ -67,6 +68,21 @@ describe('TypeOrmCommentRepository', () => {
       await uut.save(commentByOtherUser[0])
 
       const founds = await uut.findAllByUserId(userId)
+
+      expect(founds).toEqual(comments)
+    })
+  })
+
+  describe('.findAllByPostId', () => {
+    it('finds posts with given post ID', async () => {
+      const postId = new PostId('test-post-id')
+      const comments = createDummyCommentsOrderByCreatedAt(2, undefined, postId)
+      await uut.save(comments[0])
+      await uut.save(comments[1])
+      const commentByOtherUser = createDummyCommentsOrderByCreatedAt(1)
+      await uut.save(commentByOtherUser[0])
+
+      const founds = await uut.findAllByPostId(postId)
 
       expect(founds).toEqual(comments)
     })
