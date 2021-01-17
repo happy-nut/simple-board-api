@@ -1,4 +1,4 @@
-import { Args, Field, InputType, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Field, InputType, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
 import { SaveCommentError, SaveCommentUseCase } from '../../application/save-comment'
@@ -9,6 +9,10 @@ import {
   ListCommentsByAuthorIdUseCase
 } from '../../application/list-comments-by-author-id'
 import _ from 'lodash'
+import {
+  ListCommentsByPostIdError,
+  ListCommentsByPostIdUseCase
+} from '../../application/list-comments-by-post-id'
 
 @InputType()
 export class SaveCommentInput {
@@ -31,6 +35,7 @@ export class CommentResolver {
     private readonly saveCommentUseCase: SaveCommentUseCase,
     private readonly deleteCommentUseCase: DeleteCommentUseCase,
     private readonly listCommentsByAuthorIdUseCase: ListCommentsByAuthorIdUseCase,
+    private readonly listCommentsByPostIdUseCase: ListCommentsByPostIdUseCase,
     private readonly logger: Logger
   ) {
   }
@@ -91,20 +96,46 @@ export class CommentResolver {
   async listCommentsByAuthorId (@Args('authorId') authorId: string): Promise<CommentViewModel[]> {
     try {
       const responses = await this.listCommentsByAuthorIdUseCase.execute({ authorId })
-      return _.map(responses, (response) => {
-        return {
-          id: response.id,
-          authorName: response.username,
-          postId: response.postId,
-          content: response.content,
-          createdAt: response.createdAt
-        }
-      })
+      return _.map(responses, (response) => ({
+        id: response.id,
+        authorName: response.username,
+        postId: response.postId,
+        content: response.content,
+        createdAt: response.createdAt
+      }))
     } catch (error) {
       if (error instanceof ListCommentsByAuthorIdError) {
         switch (error.code) {
           case 'ListCommentsByAuthorIdError.AUTHOR_NOT_FOUND':
             throw new GraphQLError('Author not found')
+        }
+      }
+
+      this.logger.error(error)
+      throw error
+    }
+  }
+
+  @Query(() => [CommentViewModel])
+  async listCommentsByPostId (
+    @Args('postId') postId: string,
+    @Args('skip', { type: () => Int, nullable: true }) skip = 0,
+    @Args('take', { type: () => Int, nullable: true }) take = 100
+  ): Promise<CommentViewModel[]> {
+    try {
+      const responses = await this.listCommentsByPostIdUseCase.execute({ postId, skip, take })
+      return _.map(responses, (response) => ({
+        id: response.id,
+        authorName: response.username,
+        authorId: response.authorId,
+        content: response.content,
+        createdAt: response.createdAt
+      }))
+    } catch (error) {
+      if (error instanceof ListCommentsByPostIdError) {
+        switch (error.code) {
+          case 'ListCommentsByPostIdError.POST_NOT_FOUND':
+            throw new GraphQLError('Post not found')
         }
       }
 
