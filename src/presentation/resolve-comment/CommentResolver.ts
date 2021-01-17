@@ -4,6 +4,11 @@ import { GraphQLError } from 'graphql'
 import { SaveCommentError, SaveCommentUseCase } from '../../application/save-comment'
 import { DeleteCommentError, DeleteCommentUseCase } from '../../application/delete-comment'
 import { CommentViewModel } from './CommentViewModel'
+import {
+  ListCommentsByAuthorIdError,
+  ListCommentsByAuthorIdUseCase
+} from '../../application/list-comments-by-author-id'
+import _ from 'lodash'
 
 @InputType()
 export class SaveCommentInput {
@@ -25,6 +30,7 @@ export class CommentResolver {
   constructor (
     private readonly saveCommentUseCase: SaveCommentUseCase,
     private readonly deleteCommentUseCase: DeleteCommentUseCase,
+    private readonly listCommentsByAuthorIdUseCase: ListCommentsByAuthorIdUseCase,
     private readonly logger: Logger
   ) {
   }
@@ -73,6 +79,32 @@ export class CommentResolver {
         switch (error.code) {
           case 'DeleteCommentError.COMMENT_NOT_FOUND':
             throw new GraphQLError('Comment not found')
+        }
+      }
+
+      this.logger.error(error)
+      throw error
+    }
+  }
+
+  @Query(() => [CommentViewModel])
+  async listCommentsByAuthorId (@Args('authorId') authorId: string): Promise<CommentViewModel[]> {
+    try {
+      const responses = await this.listCommentsByAuthorIdUseCase.execute({ authorId })
+      return _.map(responses, (response) => {
+        return {
+          id: response.id,
+          authorName: response.username,
+          postId: response.postId,
+          content: response.content,
+          createdAt: response.createdAt
+        }
+      })
+    } catch (error) {
+      if (error instanceof ListCommentsByAuthorIdError) {
+        switch (error.code) {
+          case 'ListCommentsByAuthorIdError.AUTHOR_NOT_FOUND':
+            throw new GraphQLError('Author not found')
         }
       }
 

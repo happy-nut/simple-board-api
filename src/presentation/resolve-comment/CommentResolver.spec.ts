@@ -12,6 +12,12 @@ import {
 } from '../../application/save-comment'
 import json5 from 'json5'
 import { DeleteCommentError, DeleteCommentUseCase } from '../../application/delete-comment'
+import {
+  ListCommentsByAuthorIdError, ListCommentsByAuthorIdResponse,
+  ListCommentsByAuthorIdUseCase
+} from '../../application/list-comments-by-author-id'
+import { UserId } from '../../domain/UserId'
+import { PostId } from '../../domain/PostId'
 
 describe('CommentResolver', () => {
   let testingModule: TestingModule
@@ -19,6 +25,7 @@ describe('CommentResolver', () => {
   let uut: unknown
   let saveCommentUseCase: MockProxy<SaveCommentUseCase>
   let deleteCommentUseCase: MockProxy<DeleteCommentUseCase>
+  let listCommentsByAuthorIdUseCase: MockProxy<ListCommentsByAuthorIdUseCase>
   let logger: MockProxy<Logger>
 
   function givenSaveUseCaseRejectedWithCommentNotFoundError (): void {
@@ -41,29 +48,21 @@ describe('CommentResolver', () => {
     deleteCommentUseCase.execute.mockResolvedValueOnce()
   }
 
-  function createCommentSaveMutation (input: SaveCommentInput): string {
-    return `
-      mutation {
-        saveComment (input: ${json5.stringify(input, { quote: '"' })}) {
-          id
-        }
-      }
-    `
+  function givenListPostsByAuthorIdUseCaseRejectedWithAuthorNotFoundError (): void {
+    listCommentsByAuthorIdUseCase.execute
+      .mockRejectedValueOnce(ListCommentsByAuthorIdError.authorNotFound())
   }
 
-  function createCommentRemoveMutation (commentId: string): string {
-    return `
-      mutation {
-        removeComment (id: "${commentId}") {
-          id
-        }
-      }
-    `
+  function givenListPostsByAuthorIdUseCaseResolved (
+    response: ListCommentsByAuthorIdResponse
+  ): void {
+    listCommentsByAuthorIdUseCase.execute.mockResolvedValueOnce(response)
   }
 
   beforeEach(async () => {
     saveCommentUseCase = mock()
     deleteCommentUseCase = mock()
+    listCommentsByAuthorIdUseCase = mock()
     logger = mock()
     testingModule = await Test
       .createTestingModule({
@@ -77,6 +76,10 @@ describe('CommentResolver', () => {
           {
             provide: DeleteCommentUseCase,
             useValue: deleteCommentUseCase
+          },
+          {
+            provide: ListCommentsByAuthorIdUseCase,
+            useValue: listCommentsByAuthorIdUseCase
           },
           {
             provide: Logger,
@@ -97,6 +100,16 @@ describe('CommentResolver', () => {
   })
   
   describe('.saveComment()', () => {
+    function createCommentSaveMutation (input: SaveCommentInput): string {
+      return `
+        mutation {
+          saveComment (input: ${json5.stringify(input, { quote: '"' })}) {
+            id
+          }
+        }
+      `
+    }
+
     it('responds error when given comment case rejected with CommentNotFoundError', async () => {
       givenSaveUseCaseRejectedWithCommentNotFoundError()
       const input: SaveCommentInput = {
@@ -154,7 +167,6 @@ describe('CommentResolver', () => {
 
     it('responds a created comment when given use cases all resolved', async () => {
       const commentId = new CommentId().value
-      const createdAt = new Date()
       const createCommentResponse: SaveCommentResponse = {
         commentId: commentId
       }
@@ -189,7 +201,6 @@ describe('CommentResolver', () => {
 
     it('responds a updated comment when given use cases all resolved', async () => {
       const commentId = new CommentId().value
-      const createdAt = new Date()
       const createCommentResponse: SaveCommentResponse = {
         commentId: commentId
       }
@@ -226,6 +237,16 @@ describe('CommentResolver', () => {
   })
 
   describe('.removeComment()', () => {
+    function createCommentRemoveMutation (commentId: string): string {
+      return `
+        mutation {
+          removeComment (id: "${commentId}") {
+            id
+          }
+        }
+      `
+    }
+
     it('responds error when given delete case rejected with CommentNotFoundError', async () => {
       givenDeleteUseCaseRejectedWithCommentNotFoundError()
       const commentId = new CommentId().value
@@ -264,6 +285,92 @@ describe('CommentResolver', () => {
       expect(response.status).toBe(HttpStatus.OK)
       expect(response.body.data).toEqual({
         removeComment: null
+      })
+      expect(response.body.errors).toBeUndefined()
+    })
+  })
+
+  describe('.listCommentsByAuthorId()', () => {
+    function createCommentListCommentsByAuthorIdQuery (authorId: string): string {
+      return `
+        {
+          listCommentsByAuthorId (authorId: "${authorId}") {
+            id, postId, content, createdAt, authorName
+          }
+        }
+      `
+    }
+
+    it('responds error' +
+      ' when given list by author ID use case rejected with AuthorNotFoundError', async () => {
+      givenListPostsByAuthorIdUseCaseRejectedWithAuthorNotFoundError()
+      const authorId = new UserId().value
+      const query = createCommentListCommentsByAuthorIdQuery(authorId)
+
+      const response = await request(uut)
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query
+        })
+
+      expect(listCommentsByAuthorIdUseCase.execute).toHaveBeenCalledWith({ authorId })
+      expect(response.status).toBe(HttpStatus.OK)
+      expect(response.body.data).toBeNull()
+      expect(response.body.errors[0]).toEqual(expect.objectContaining({
+        message: 'Author not found'
+      }))
+    })
+
+    it('responds error' +
+      ' when given list by author ID use case rejected with AuthorNotFoundError', async () => {
+      const listResponse: ListCommentsByAuthorIdResponse = [
+        {
+          content: 'test-content-1',
+          postId: new PostId().value,
+          createdAt: new Date(),
+          id: new CommentId().value,
+          username: 'test-username-1'
+        },
+        {
+          content: 'test-content-2',
+          postId: new PostId().value,
+          createdAt: new Date(),
+          id: new CommentId().value,
+          username: 'test-username-2'
+        }
+      ]
+
+      givenListPostsByAuthorIdUseCaseResolved(listResponse)
+      const authorId = new UserId().value
+      const query = createCommentListCommentsByAuthorIdQuery(authorId)
+
+      const response = await request(uut)
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query
+        })
+
+      expect(listCommentsByAuthorIdUseCase.execute).toHaveBeenCalledWith({ authorId })
+      expect(response.status).toBe(HttpStatus.OK)
+      expect(response.body.data).toEqual({
+        listCommentsByAuthorId: [
+          {
+            id: listResponse[0].id,
+            content: listResponse[0].content,
+            postId: listResponse[0].postId,
+            createdAt: listResponse[0].createdAt.toISOString(),
+            authorName: listResponse[0].username
+          },
+          {
+            id: listResponse[1].id,
+            content: listResponse[1].content,
+            postId: listResponse[1].postId,
+            createdAt: listResponse[1].createdAt.toISOString(),
+            authorName: listResponse[1].username
+          }
+        ]
       })
       expect(response.body.errors).toBeUndefined()
     })
