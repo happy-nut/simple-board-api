@@ -62,7 +62,7 @@ export class SavePostController {
       const response = await this.savePostUseCase.execute({
         authorId: body.authorId,
         content: body.content,
-        title: body.content
+        title: body.title
       })
       return new SavePostViewModel({
         id: response.postId
@@ -97,7 +97,7 @@ export class SavePostController {
         id: postId,
         authorId: body.authorId,
         content: body.content,
-        title: body.content
+        title: body.title
       })
 
       return new SavePostViewModel({

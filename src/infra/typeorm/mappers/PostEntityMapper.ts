@@ -1,5 +1,5 @@
-import { Post} from '../../../domain/Post'
-import { PostEntity } from '../entities/PostEntity'
+import { Post } from '../../../domain/Post'
+import { PostEntity } from '../entities'
 import { UserId } from '../../../domain/UserId'
 import { PostId } from '../../../domain/PostId'
 
