@@ -69,8 +69,8 @@ export class CommentResolver {
   }
 
   @Query(() => CommentViewModel, { nullable: true })
-  async getComment (@Args('input') input: SaveCommentInput): Promise<CommentViewModel> {
-    throw new GraphQLError('Use list comments API instead')
+  async getComment (): Promise<CommentViewModel> {
+    throw new GraphQLError('This is not allowed. Use comments listing API instead.')
   }
 
   @Mutation(() => CommentViewModel)

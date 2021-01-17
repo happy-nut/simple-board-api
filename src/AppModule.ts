@@ -33,6 +33,7 @@ import { ListCommentsByPostIdUseCase } from './application/list-comments-by-post
 import { DeleteCommentController } from './presentation/delete-comment'
 import { DeleteCommentUseCase } from './application/delete-comment'
 import { PostResolver } from './presentation/resolve-post'
+import { CommentResolver } from './presentation/resolve-comment'
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { PostResolver } from './presentation/resolve-post'
     DeleteCommentUseCase,
     UserResolver,
     PostResolver,
+    CommentResolver,
     {
       provide: USER_REPOSITORY,
       useClass: TypeOrmUserRepository

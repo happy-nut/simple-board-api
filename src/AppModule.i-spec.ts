@@ -15,6 +15,7 @@ import { ListCommentsByAuthorIdController } from './presentation/list-comments-b
 import { ListCommentsByPostIdController } from './presentation/list-comments-by-post-id'
 import { DeleteCommentController } from './presentation/delete-comment'
 import { PostResolver } from './presentation/resolve-post'
+import { CommentResolver } from './presentation/resolve-comment'
 
 describe('AppModule', () => {
   let uut: TestingModule
@@ -95,5 +96,9 @@ describe('AppModule', () => {
 
   it('gets PostResolver', () => {
     expect(uut.get(PostResolver)).toBeInstanceOf(PostResolver)
+  })
+
+  it('gets CommentResolver', () => {
+    expect(uut.get(CommentResolver)).toBeInstanceOf(CommentResolver)
   })
 })
