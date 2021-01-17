@@ -11,7 +11,7 @@ export function createDummyCommentsOrderByCreatedAt (
   commentId?: CommentId
 ): Comment[] {
   return _.times(count, (i) => {
-    const time = `${i}`.padStart(2, '0')
+    const time = `${count - i}`.padStart(2, '0')
     return Comment.create(
       {
         createdAt: new Date(`2021-01-16T${time}:00:00Z`),

@@ -20,7 +20,7 @@ export class TypeOrmPostRepository implements PostRepository {
     if (skip < 0 || take <= 0) {
       return []
     }
-    const postEntities = await this.repository.find({ skip, take, order: { createdAt: 'ASC' } })
+    const postEntities = await this.repository.find({ skip, take, order: { createdAt: 'DESC' } })
     return _.map(postEntities, PostEntityMapper.toDomain)
   }
 
@@ -36,7 +36,7 @@ export class TypeOrmPostRepository implements PostRepository {
   async findAllByUserId (userId: UserId): Promise<Post[]> {
     const postEntities = await this.repository.find({
       where: { authorId: userId.value },
-      order: { createdAt: 'ASC' }
+      order: { createdAt: 'DESC' }
     })
     return _.map(postEntities, PostEntityMapper.toDomain)
   }

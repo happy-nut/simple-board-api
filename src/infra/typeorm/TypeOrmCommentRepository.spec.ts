@@ -5,7 +5,12 @@ import { TypeOrmCommentRepository } from './TypeOrmCommentRepository'
 import { CommentEntity } from './entities'
 import { DatabaseModule } from '../../modules'
 import { CommentId } from '../../domain/CommentId'
-import { createDummyComment } from '../../../test/support/utils'
+import {
+  createDummyComment,
+  createDummyCommentsOrderByCreatedAt,
+  createDummyPostsOrderByCreatedAt
+} from '../../../test/support/utils'
+import { UserId } from '../../domain/UserId'
 
 describe('TypeOrmCommentRepository', () => {
   let connection: Connection
@@ -49,6 +54,21 @@ describe('TypeOrmCommentRepository', () => {
       expect(found.postId.equals(comment.postId)).toBeTrue()
       expect(found.content).toBe(comment.content)
       expect(found.createdAt).toEqual<Date>(comment.createdAt)
+    })
+  })
+
+  describe('.findAllByUserId', () => {
+    it('finds posts with given user ID', async () => {
+      const userId = new UserId('test-user-id')
+      const comments = createDummyCommentsOrderByCreatedAt(2, userId)
+      await uut.save(comments[0])
+      await uut.save(comments[1])
+      const commentByOtherUser = createDummyCommentsOrderByCreatedAt(1)
+      await uut.save(commentByOtherUser[0])
+
+      const founds = await uut.findAllByUserId(userId)
+
+      expect(founds).toEqual(comments)
     })
   })
 
