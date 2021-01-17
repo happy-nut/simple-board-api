@@ -3,6 +3,7 @@ import { GetPostError, GetPostUseCase } from '../../application/get-post'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
 import { SavePostError, SavePostUseCase } from '../../application/save-post'
+import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
 
 interface PostViewModelProps {
   id: string
@@ -64,6 +65,7 @@ export class PostResolver {
   constructor (
     private readonly getPostUseCase: GetPostUseCase,
     private readonly savePostUseCase: SavePostUseCase,
+    private readonly deletePostUseCase: DeletePostUseCase,
     private readonly logger: Logger
   ) {
   }
@@ -131,6 +133,24 @@ export class PostResolver {
             throw new GraphQLError('Post not found')
           case 'AUTHOR_NOT_FOUND':
             throw new GraphQLError('Author not found')
+        }
+      }
+
+      this.logger.error(error)
+      throw error
+    }
+  }
+
+  @Mutation(() => PostViewModel, { nullable: true })
+  async removePost (@Args('id') id: string): Promise<null> {
+    try {
+      await this.deletePostUseCase.execute({ postId: id })
+      return null
+    } catch (error) {
+      if (error instanceof DeletePostError) {
+        switch (error.code) {
+          case 'DeletePostError.POST_NOT_FOUND':
+            throw new GraphQLError('Post not found')
         }
       }
 

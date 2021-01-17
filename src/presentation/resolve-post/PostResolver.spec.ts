@@ -13,6 +13,7 @@ import {
 } from '../../application/save-post'
 import json5 from 'json5'
 import { createDummyPost } from '../../../test/support/utils'
+import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
 
 describe('PostResolver', () => {
   let testingModule: TestingModule
@@ -20,6 +21,7 @@ describe('PostResolver', () => {
   let uut: unknown
   let getPostUseCase: MockProxy<GetPostUseCase>
   let savePostUseCase: MockProxy<SavePostUseCase>
+  let deletePostUseCase: MockProxy<DeletePostUseCase>
   let logger: MockProxy<Logger>
 
   function givenGetUseCaseRejectedWithPostNotFoundError (): void {
@@ -46,6 +48,14 @@ describe('PostResolver', () => {
     savePostUseCase.execute.mockResolvedValueOnce(response)
   }
 
+  function givenDeleteUseCaseRejectedWithPostNotFoundError (): void {
+    deletePostUseCase.execute.mockRejectedValueOnce(DeletePostError.postNotFound())
+  }
+
+  function givenDeleteUseCaseResolved (): void {
+    deletePostUseCase.execute.mockResolvedValueOnce()
+  }
+
   function createPostQuery (postId: string): string {
     return `
       {
@@ -56,7 +66,7 @@ describe('PostResolver', () => {
     `
   }
 
-  function createPostMutation (input: SavePostInput): string {
+  function createPostSaveMutation (input: SavePostInput): string {
     return `
       mutation {
         savePost (input: ${json5.stringify(input, { quote: '"' })}) {
@@ -66,9 +76,20 @@ describe('PostResolver', () => {
     `
   }
 
+  function createPostRemoveMutation (postId: string): string {
+    return `
+      mutation {
+        removePost (id: "${postId}") {
+          id, authorId, authorName, title, content, createdAt
+        }
+      }
+    `
+  }
+
   beforeEach(async () => {
     getPostUseCase = mock()
     savePostUseCase = mock()
+    deletePostUseCase = mock()
     logger = mock()
     testingModule = await Test
       .createTestingModule({
@@ -82,6 +103,10 @@ describe('PostResolver', () => {
           {
             provide: SavePostUseCase,
             useValue: savePostUseCase
+          },
+          {
+            provide: DeletePostUseCase,
+            useValue: deletePostUseCase
           },
           {
             provide: Logger,
@@ -185,7 +210,7 @@ describe('PostResolver', () => {
         authorId: 'test-author-id',
         content: 'test-content'
       }
-      const mutation = createPostMutation(input)
+      const mutation = createPostSaveMutation(input)
 
       const response = await request(uut)
         .post('/graphql')
@@ -213,7 +238,7 @@ describe('PostResolver', () => {
         authorId: 'test-author-id',
         content: 'test-content'
       }
-      const mutation = createPostMutation(input)
+      const mutation = createPostSaveMutation(input)
 
       const response = await request(uut)
         .post('/graphql')
@@ -253,7 +278,7 @@ describe('PostResolver', () => {
         authorId: 'test-author-id',
         content: 'test-content'
       }
-      const mutation = createPostMutation(input)
+      const mutation = createPostSaveMutation(input)
 
       const response = await request(uut)
         .post('/graphql')
@@ -302,7 +327,7 @@ describe('PostResolver', () => {
         authorId: 'test-author-id',
         content: 'test-content'
       }
-      const mutation = createPostMutation(input)
+      const mutation = createPostSaveMutation(input)
 
       const response = await request(uut)
         .post('/graphql')
@@ -327,6 +352,50 @@ describe('PostResolver', () => {
           content: 'test-content',
           createdAt: createdAt.toISOString()
         }
+      })
+      expect(response.body.errors).toBeUndefined()
+    })
+  })
+
+  describe('.removePost()', () => {
+    it('responds error when given delete case rejected with PostNotFoundError', async () => {
+      givenDeleteUseCaseRejectedWithPostNotFoundError()
+      const postId = new PostId().value
+      const mutation = createPostRemoveMutation(postId)
+
+      const response = await request(uut)
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query: mutation
+        })
+
+      expect(deletePostUseCase.execute).toHaveBeenCalledWith({ postId })
+      expect(response.status).toBe(HttpStatus.OK)
+      expect(response.body.data).toEqual({
+        removePost: null
+      })
+      expect(response.body.errors[0]).toEqual(expect.objectContaining({
+        message: 'Post not found'
+      }))
+    })
+
+    it('responds null when given delete case resolved', async () => {
+      givenDeleteUseCaseResolved()
+      const postId = new PostId().value
+      const mutation = createPostRemoveMutation(postId)
+
+      const response = await request(uut)
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query: mutation
+        })
+
+      expect(deletePostUseCase.execute).toHaveBeenCalledWith({ postId })
+      expect(response.status).toBe(HttpStatus.OK)
+      expect(response.body.data).toEqual({
+        removePost: null
       })
       expect(response.body.errors).toBeUndefined()
     })
