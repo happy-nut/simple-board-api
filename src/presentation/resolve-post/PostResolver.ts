@@ -99,6 +99,7 @@ export class PostResolver {
   async savePost (@Args('input') input: SavePostInput): Promise<PostViewModel> {
     try {
       const { postId } = await this.savePostUseCase.execute({
+        id: input.id,
         title: input.title,
         content: input.content,
         authorId: input.authorId

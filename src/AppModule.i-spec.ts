@@ -14,6 +14,7 @@ import { SaveCommentController } from './presentation/save-comment'
 import { ListCommentsByAuthorIdController } from './presentation/list-comments-by-author-id'
 import { ListCommentsByPostIdController } from './presentation/list-comments-by-post-id'
 import { DeleteCommentController } from './presentation/delete-comment'
+import { PostResolver } from './presentation/resolve-post'
 
 describe('AppModule', () => {
   let uut: TestingModule
@@ -90,5 +91,9 @@ describe('AppModule', () => {
 
   it('gets UserResolver', () => {
     expect(uut.get(UserResolver)).toBeInstanceOf(UserResolver)
+  })
+
+  it('gets PostResolver', () => {
+    expect(uut.get(PostResolver)).toBeInstanceOf(PostResolver)
   })
 })

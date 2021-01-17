@@ -312,6 +312,7 @@ describe('PostResolver', () => {
         })
 
       expect(savePostUseCase.execute).toHaveBeenCalledWith({
+        id: postId,
         title: 'test-title',
         authorId: 'test-author-id',
         content: 'test-content'

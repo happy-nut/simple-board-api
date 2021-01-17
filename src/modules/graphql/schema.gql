@@ -2,28 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Post {
+type User {
   id: String!
-  authorId: String!
-  authorName: String!
-  title: String!
-  content: String!
-  createdAt: Date!
+  name: String!
+  registeredAt: Date!
 }
 
 scalar Date
 
 type Query {
-  getPost(id: String!): Post!
+  getUser(id: String!): User!
 }
 
 type Mutation {
-  savePost(input: SavePostInput!): Post!
+  createUser(input: CreateUserInput!): User!
 }
 
-input SavePostInput {
-  id: String
-  title: String!
-  content: String!
-  authorId: String!
+input CreateUserInput {
+  name: String!
 }
