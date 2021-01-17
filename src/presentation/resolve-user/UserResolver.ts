@@ -45,7 +45,7 @@ export class UserResolver {
   }
 
   @Query(() => UserViewModel)
-  async getUser (@Args('id', { type: () => String }) id: string): Promise<UserViewModel> {
+  async getUser (@Args('id') id: string): Promise<UserViewModel> {
     try {
       const user = await this.getUserUseCase.execute({ id })
       return new UserViewModel({

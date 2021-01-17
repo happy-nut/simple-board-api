@@ -101,7 +101,7 @@ describe('UserResolver', () => {
     await testingModule.close()
   })
 
-  describe('.get()', () => {
+  describe('.getUser()', () => {
     it('responds with errors when user of given ID does not exist', async () => {
       givenGetUseCaseRejectedWithUserNotFoundError()
       const userId = new UserId().value
@@ -171,7 +171,7 @@ describe('UserResolver', () => {
     })
   })
 
-  describe('.create()', () => {
+  describe('.createUser()', () => {
     it('responds error when given user case rejected with userCreatingFailed error', async () => {
       givenCreateUseCaseRejectedWithUserCreatingFailedError()
       const input: CreateUserInput = {
@@ -219,7 +219,7 @@ describe('UserResolver', () => {
       expect(logger.error).toHaveBeenCalled()
     })
 
-    it('responds a user and logs when given user case resolved', async () => {
+    it('responds a user when given user case resolved', async () => {
       const userId = new UserId().value
       const name = 'test-user-name'
       const registeredAt = new Date()
