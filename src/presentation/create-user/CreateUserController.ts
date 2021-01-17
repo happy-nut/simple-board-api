@@ -1,7 +1,7 @@
 import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
-  ApiProperty
+  ApiProperty, ApiTags
 } from '@nestjs/swagger'
 import {
   Body,
@@ -31,6 +31,7 @@ export class CreateUserController {
   ) {
   }
 
+  @ApiTags('User')
   @HttpCode(HttpStatus.OK)
   @Post('users')
   @ApiOkResponse({ type: CreateUserViewModel })

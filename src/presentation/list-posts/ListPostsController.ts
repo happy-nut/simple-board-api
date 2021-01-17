@@ -2,7 +2,8 @@ import {
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiProperty
+  ApiProperty,
+  ApiTags
 } from '@nestjs/swagger'
 import {
   Controller,
@@ -53,6 +54,7 @@ export class ListPostsController {
   ) {
   }
 
+  @ApiTags('Post')
   @HttpCode(HttpStatus.OK)
   @Get('posts')
   @ApiOkResponse({ type: [ListPostsViewModel] })

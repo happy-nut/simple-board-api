@@ -2,7 +2,8 @@ import {
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiProperty
+  ApiProperty,
+  ApiTags
 } from '@nestjs/swagger'
 import {
   Body,
@@ -50,6 +51,7 @@ export class SavePostController {
   ) {
   }
 
+  @ApiTags('Post')
   @HttpCode(HttpStatus.OK)
   @Post('posts')
   @ApiOkResponse({ type: SavePostViewModel })
@@ -80,6 +82,7 @@ export class SavePostController {
     }
   }
 
+  @ApiTags('Post')
   @HttpCode(HttpStatus.OK)
   @Put('posts/:postId')
   @ApiOkResponse()

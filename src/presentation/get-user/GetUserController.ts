@@ -1,4 +1,9 @@
-import { ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger'
+import {
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags
+} from '@nestjs/swagger'
 import {
   Controller,
   Get,
@@ -24,6 +29,7 @@ export class GetUserController {
   ) {
   }
 
+  @ApiTags('User')
   @HttpCode(HttpStatus.OK)
   @Get('users/:userId')
   @ApiOkResponse({ type: GetUserViewModel })

@@ -2,7 +2,8 @@ import {
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiProperty
+  ApiProperty,
+  ApiTags
 } from '@nestjs/swagger'
 import {
   Controller,
@@ -63,6 +64,7 @@ export class ListCommentsByPostIdController {
   ) {
   }
 
+  @ApiTags('Post')
   @HttpCode(HttpStatus.OK)
   @Get('posts/:postId/comments')
   @ApiImplicitQuery({

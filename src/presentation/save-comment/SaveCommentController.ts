@@ -2,7 +2,8 @@ import {
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiProperty
+  ApiProperty,
+  ApiTags
 } from '@nestjs/swagger'
 import {
   Body,
@@ -50,6 +51,7 @@ export class SaveCommentController {
   ) {
   }
 
+  @ApiTags('Comment')
   @HttpCode(HttpStatus.OK)
   @Post('comments')
   @ApiOkResponse({ type: SaveCommentViewModel })
@@ -80,6 +82,7 @@ export class SaveCommentController {
     }
   }
 
+  @ApiTags('Comment')
   @HttpCode(HttpStatus.OK)
   @Put('comments/:commentId')
   @ApiOkResponse()
