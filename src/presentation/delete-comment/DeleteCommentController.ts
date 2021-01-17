@@ -6,30 +6,30 @@ import {
   NotFoundException,
   Param
 } from '@nestjs/common'
-import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
 import { ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiTags } from '@nestjs/swagger'
+import { DeleteCommentError, DeleteCommentUseCase } from '../../application/delete-comment'
 
-type DeletePostViewModel = void
+type DeleteCommentViewModel = void
 
 @Controller()
-export class DeletePostController {
+export class DeleteCommentController {
   constructor (
-    private readonly deletePostUseCase: DeletePostUseCase,
+    private readonly deleteCommentUseCase: DeleteCommentUseCase,
     private readonly logger: Logger
   ) {
   }
 
-  @ApiTags('Post')
-  @Delete('posts/:postId')
+  @ApiTags('Comment')
+  @Delete('comments/:commentId')
   @ApiNotFoundResponse()
   @ApiInternalServerErrorResponse()
-  async delete (@Param('postId') postId: string): Promise<DeletePostViewModel> {
+  async delete (@Param('commentId') commentId: string): Promise<DeleteCommentViewModel> {
     try {
-      await this.deletePostUseCase.execute({ postId })
+      await this.deleteCommentUseCase.execute({ commentId })
     } catch (error) {
-      if (error instanceof DeletePostError) {
+      if (error instanceof DeleteCommentError) {
         switch (error.code) {
-          case 'DeletePostError.POST_NOT_FOUND':
+          case 'DeleteCommentError.COMMENT_NOT_FOUND':
             throw new NotFoundException()
         }
       }
