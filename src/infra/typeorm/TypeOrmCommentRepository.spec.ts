@@ -74,6 +74,20 @@ describe('TypeOrmCommentRepository', () => {
   })
 
   describe('.findAllByPostId', () => {
+    it('finds nothing when take is equal or smaller than 0', async () => {
+      const postId = new PostId()
+      const posts = await uut.findAllByPostId(postId, 0, 0)
+
+      expect(posts).toEqual([])
+    })
+
+    it('finds nothing when skip is smaller than 0', async () => {
+      const postId = new PostId()
+      const posts = await uut.findAllByPostId(postId, -1, 1)
+
+      expect(posts).toEqual([])
+    })
+
     it('finds posts with given post ID', async () => {
       const postId = new PostId('test-post-id')
       const comments = createDummyCommentsOrderByCreatedAt(2, undefined, postId)
@@ -82,7 +96,7 @@ describe('TypeOrmCommentRepository', () => {
       const commentByOtherUser = createDummyCommentsOrderByCreatedAt(1)
       await uut.save(commentByOtherUser[0])
 
-      const founds = await uut.findAllByPostId(postId)
+      const founds = await uut.findAllByPostId(postId, 0, 3)
 
       expect(founds).toEqual(comments)
     })

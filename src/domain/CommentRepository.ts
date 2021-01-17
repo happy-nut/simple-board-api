@@ -10,7 +10,7 @@ export interface CommentRepository {
 
   findAllByUserId (userId: UserId): Promise<Comment[]>
 
-  findAllByPostId (postId: PostId): Promise<Comment[]>
+  findAllByPostId (postId: PostId, skip: number, take: number): Promise<Comment[]>
 
   save (comment: Comment): Promise<Comment>
 }

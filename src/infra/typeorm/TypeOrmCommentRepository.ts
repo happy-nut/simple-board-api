@@ -34,10 +34,16 @@ export class TypeOrmCommentRepository implements CommentRepository {
     return _.map(entities, CommentEntityMapper.toDomain)
   }
 
-  async findAllByPostId (postId: PostId): Promise<Comment[]> {
+  async findAllByPostId (postId: PostId, skip: number, take: number): Promise<Comment[]> {
+    if (skip < 0 || take <= 0) {
+      return []
+    }
+
     const entities = await this.repository.find({
       where: { postId: postId.value },
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
+      skip,
+      take
     })
     return _.map(entities, CommentEntityMapper.toDomain)
   }
