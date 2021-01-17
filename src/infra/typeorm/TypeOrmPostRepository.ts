@@ -2,10 +2,11 @@ import { Connection, Repository } from 'typeorm'
 import { UserId } from '../../domain/UserId'
 import _ from 'lodash'
 import { PostRepository } from '../../domain/PostRepository'
-import { Post, PostId } from '../../domain/Post'
+import { Post} from '../../domain/Post'
 import { PostEntity } from './entities'
 import { PostEntityMapper } from './mappers/PostEntityMapper'
 import { Injectable } from '@nestjs/common'
+import { PostId } from '../../domain/PostId'
 
 @Injectable()
 export class TypeOrmPostRepository implements PostRepository {

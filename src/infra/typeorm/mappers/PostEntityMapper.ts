@@ -1,6 +1,7 @@
-import { Post, PostId } from '../../../domain/Post'
+import { Post} from '../../../domain/Post'
 import { PostEntity } from '../entities/PostEntity'
 import { UserId } from '../../../domain/UserId'
+import { PostId } from '../../../domain/PostId'
 
 export class PostEntityMapper {
   static fromDomain (post: Post): PostEntity {

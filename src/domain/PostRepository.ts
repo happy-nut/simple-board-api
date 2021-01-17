@@ -1,5 +1,6 @@
-import { Post, PostId } from './Post'
+import { Post} from './Post'
 import { UserId } from './UserId'
+import { PostId } from './PostId'
 
 export const POST_REPOSITORY = Symbol('POST_REPOSITORY')
 

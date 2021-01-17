@@ -1,7 +1,7 @@
 import { Connection } from 'typeorm'
 import { UserId } from '../../domain/UserId'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Post, PostId } from '../../domain/Post'
+import { Post} from '../../domain/Post'
 import { TypeOrmPostRepository } from './TypeOrmPostRepository'
 import _ from 'lodash'
 import { PostEntity } from './entities'
@@ -9,6 +9,7 @@ import { DatabaseModule } from '../../modules'
 import {
   createDummyPostsOrderByCreatedAt
 } from '../../../test/support/utils/createDummyPostsOrderByCreatedAt'
+import { PostId } from '../../domain/PostId'
 
 describe('TypeOrmPostRepository', () => {
   let connection: Connection

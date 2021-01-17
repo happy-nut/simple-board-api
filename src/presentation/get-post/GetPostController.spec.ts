@@ -5,7 +5,7 @@ import { mock, MockProxy } from 'jest-mock-extended'
 import { UserId } from '../../domain/UserId'
 import { GetPostError, GetPostResponse, GetPostUseCase } from '../../application/get-post'
 import { GetPostController } from './GetPostController'
-import { PostId } from '../../domain/Post'
+import { PostId } from '../../domain/PostId'
 
 describe('GetPostController', () => {
   let testingModule: TestingModule

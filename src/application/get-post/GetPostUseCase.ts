@@ -1,10 +1,10 @@
 import { UseCase } from '../../shared/ddd'
 import _ from 'lodash'
 import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
-import { PostId } from '../../domain/Post'
 import { GetPostError } from './GetPostError'
 import { USER_REPOSITORY, UserRepository } from '../../domain'
 import { Inject, Injectable } from '@nestjs/common'
+import { PostId } from '../../domain/PostId'
 
 interface GetPostRequest {
   id: string

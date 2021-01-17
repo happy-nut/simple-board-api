@@ -1,9 +1,10 @@
 import { PostRepository } from '../../domain/PostRepository'
 import { mock, MockProxy } from 'jest-mock-extended'
-import { Post, PostId } from '../../domain/Post'
+import { Post} from '../../domain/Post'
 import { UserId } from '../../domain/UserId'
 import { DeletePostUseCase } from './DeletePostUseCase'
 import { DeletePostError } from './DeletePostError'
+import { PostId } from '../../domain/PostId'
 
 describe('DeletePostUseCase', () => {
   const POST_ID = 'test-post-id'

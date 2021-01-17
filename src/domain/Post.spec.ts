@@ -1,5 +1,6 @@
 import { UserId } from './UserId'
-import { Post, PostId } from './Post'
+import { Post} from './Post'
+import { PostId } from './PostId'
 
 describe('Post', () => {
   describe('.create', () => {

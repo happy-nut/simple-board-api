@@ -2,9 +2,10 @@ import { mock, MockProxy } from 'jest-mock-extended'
 import { UserId } from '../../domain/UserId'
 import { SavePostUseCase } from './SavePostUseCase'
 import { PostRepository } from '../../domain/PostRepository'
-import { Post, PostId } from '../../domain/Post'
+import { Post} from '../../domain/Post'
 import { SavePostError } from './SavePostError'
 import { User, UserRepository } from '../../domain'
+import { PostId } from '../../domain/PostId'
 
 describe('SavePostUseCase', () => {
   let userRepository: MockProxy<UserRepository>

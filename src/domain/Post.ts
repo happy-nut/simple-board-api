@@ -1,8 +1,6 @@
-import { AggregateRoot, EntityId } from '../shared/ddd'
+import { AggregateRoot } from '../shared/ddd'
 import { UserId } from './UserId'
-
-export class PostId extends EntityId {
-}
+import { PostId } from './PostId'
 
 export interface PostProps {
   authorId: UserId

@@ -1,11 +1,12 @@
 import _ from 'lodash'
 import { UseCase } from '../../shared/ddd'
-import { Post, PostId } from '../../domain/Post'
+import { Post} from '../../domain/Post'
 import { UserId } from '../../domain/UserId'
 import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
 import { SavePostError } from './SavePostError'
 import { USER_REPOSITORY, UserRepository } from '../../domain'
 import { Inject, Injectable } from '@nestjs/common'
+import { PostId } from '../../domain/PostId'
 
 interface SavePostRequest {
   id?: string

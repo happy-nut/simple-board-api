@@ -1,13 +1,13 @@
-import { Post, PostId } from '../../../domain/Post'
+import { Post } from '../../../domain/Post'
 import { PostEntityMapper } from './PostEntityMapper'
 import { UserId } from '../../../domain/UserId'
 import { PostEntity } from '../entities/PostEntity'
+import { PostId } from '../../../domain/PostId'
 
 describe('PostEntityMapper', () => {
   describe('.fromDomain', () => {
     it('maps from Post to PostEntity', () => {
       const post = Post.createNew({
-        createdAt: new Date(),
         content: 'test-content',
         title: 'test-title',
         authorId: new UserId('test-user-id')

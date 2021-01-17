@@ -1,9 +1,9 @@
 import { UseCase } from '../../shared/ddd'
 import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
-import { PostId } from '../../domain/Post'
 import _ from 'lodash'
 import { DeletePostError } from './DeletePostError'
 import { Inject, Injectable } from '@nestjs/common'
+import { PostId } from '../../domain/PostId'
 
 interface DeletePostRequest {
   postId: string
