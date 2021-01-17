@@ -1,9 +1,10 @@
-import { UserRepository } from '../../domain'
+import { USER_REPOSITORY, UserRepository } from '../../domain'
 import { UseCase } from '../../shared/ddd'
-import { CommentRepository } from '../../domain/CommentRepository'
+import { COMMENT_REPOSITORY, CommentRepository } from '../../domain/CommentRepository'
 import _ from 'lodash'
 import { ListCommentsByAuthorIdError } from './ListCommentsByAuthorIdError'
 import { UserId } from '../../domain/UserId'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface ListCommentsByAuthorIdRequest {
   authorId: string
@@ -19,10 +20,13 @@ interface Comment {
 
 export type ListCommentsByAuthorIdResponse = Comment[]
 
+@Injectable()
 export class ListCommentsByAuthorIdUseCase
 implements UseCase<ListCommentsByAuthorIdRequest, ListCommentsByAuthorIdResponse> {
   constructor (
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(COMMENT_REPOSITORY)
     private readonly commentRepository: CommentRepository
   ) {
   }

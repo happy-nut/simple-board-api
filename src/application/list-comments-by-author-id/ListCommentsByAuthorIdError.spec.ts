@@ -6,7 +6,7 @@ describe('ListCommentsByAuthorIdError', () => {
       const error = ListCommentsByAuthorIdError.authorNotFound()
 
       expect(error).toBeInstanceOf(ListCommentsByAuthorIdError)
-      expect(error.code).toBe('AUTHOR_NOT_FOUND')
+      expect(error.code).toBe('ListCommentsByAuthorIdError.AUTHOR_NOT_FOUND')
     })
   })
 })

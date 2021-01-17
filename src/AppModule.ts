@@ -26,6 +26,8 @@ import { GetPostUseCase } from './application/get-post'
 import { SaveCommentController } from './presentation/save-comment'
 import { SaveCommentUseCase } from './application/save-comment'
 import { COMMENT_REPOSITORY } from './domain/CommentRepository'
+import { ListCommentsByAuthorIdController } from './presentation/list-comments-by-author-id'
+import { ListCommentsByAuthorIdUseCase } from './application/list-comments-by-author-id'
 
 @Module({
   imports: [
@@ -41,7 +43,8 @@ import { COMMENT_REPOSITORY } from './domain/CommentRepository'
     DeletePostController,
     ListPostsByAuthorIdController,
     GetPostController,
-    SaveCommentController
+    SaveCommentController,
+    ListCommentsByAuthorIdController
   ],
   providers: [
     Logger,
@@ -53,6 +56,7 @@ import { COMMENT_REPOSITORY } from './domain/CommentRepository'
     ListPostsByAuthorIdUseCase,
     GetPostUseCase,
     SaveCommentUseCase,
+    ListCommentsByAuthorIdUseCase,
     UserResolver,
     {
       provide: USER_REPOSITORY,

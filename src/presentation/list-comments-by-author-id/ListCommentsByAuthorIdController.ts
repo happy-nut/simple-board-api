@@ -66,7 +66,7 @@ export class ListCommentsByAuthorIdController {
   @ApiOkResponse({ type: [ListCommentsByAuthorIdViewModel] })
   @ApiNotFoundResponse({ description: 'author not found' })
   @ApiInternalServerErrorResponse()
-  async list (@Param('authorId') authorId: string): Promise<ListCommentsByAuthorIdViewModel[]> {
+  async list (@Param('userId') authorId: string): Promise<ListCommentsByAuthorIdViewModel[]> {
     try {
       const responses = await this.ListCommentsByAuthorIdUseCase.execute({ authorId })
       return _.map(responses, (response) => ({
@@ -79,7 +79,7 @@ export class ListCommentsByAuthorIdController {
     } catch (error) {
       if (error instanceof ListCommentsByAuthorIdError) {
         switch (error.code) {
-          case 'AUTHOR_NOT_FOUND':
+          case 'ListCommentsByAuthorIdError.AUTHOR_NOT_FOUND':
             throw new NotFoundException()
         }
       }

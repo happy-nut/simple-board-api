@@ -29,7 +29,7 @@ interface ListPostsByAuthorIdViewModelProps {
   createdAt: Date
 }
 
-class ListPostsByAuthorIdViewModel {
+class ListPostsAuthorIdViewModel {
   @ApiProperty({ type: String })
   id: string
 
@@ -68,10 +68,10 @@ export class ListPostsByAuthorIdController {
 
   @HttpCode(HttpStatus.OK)
   @Get('users/:userId/posts')
-  @ApiOkResponse({ type: [ListPostsByAuthorIdViewModel] })
-  @ApiNotFoundResponse({ description: 'author not found' })
+  @ApiOkResponse({ type: [ListPostsAuthorIdViewModel] })
+  @ApiNotFoundResponse({ description: 'authors not found' })
   @ApiInternalServerErrorResponse()
-  async list (@Param('userId') userId: string): Promise<ListPostsByAuthorIdViewModel[]> {
+  async list (@Param('userId') userId: string): Promise<ListPostsAuthorIdViewModel[]> {
     try {
       const posts = await this.listPostsByAuthorIdUseCase.execute({ userId })
       return _.map(posts, (post) => ({

@@ -11,6 +11,7 @@ import { UserResolver } from './presentation/resolve-user'
 import { ListPostsByAuthorIdController } from './presentation/list-posts-by-author-id'
 import { GetPostController } from './presentation/get-post'
 import { SaveCommentController } from './presentation/save-comment'
+import { ListCommentsByAuthorIdController } from './presentation/list-comments-by-author-id'
 
 describe('AppModule', () => {
   let uut: TestingModule
@@ -69,6 +70,11 @@ describe('AppModule', () => {
 
   it('gets SaveCommentController', () => {
     expect(uut.get(SaveCommentController)).toBeInstanceOf(SaveCommentController)
+  })
+
+  it('gets ListCommentsByAuthorIdController', () => {
+    expect(uut.get(ListCommentsByAuthorIdController))
+      .toBeInstanceOf(ListCommentsByAuthorIdController)
   })
 
   it('gets UserResolver', () => {
