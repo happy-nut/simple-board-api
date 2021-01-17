@@ -5,9 +5,7 @@ import { Post } from '../../domain/Post'
 import { ListPostsByAuthorIdUseCase } from './ListPostsByAuthorIdUseCase'
 import { UserId } from '../../domain/UserId'
 import { ListPostsByAuthorIdError } from './ListPostsByAuthorIdError'
-import {
-  createDummyPostsOrderByCreatedAt
-} from '../../../test/support/utils/createDummyPostsOrderByCreatedAt'
+import { createDummyPostsOrderByCreatedAt, createDummyUser } from '../../../test/support/utils'
 
 describe('ListPostsByAuthorIdUseCase', () => {
   let userRepository: MockProxy<UserRepository>
@@ -49,13 +47,7 @@ describe('ListPostsByAuthorIdUseCase', () => {
 
   it('returns empty list when given post repository resolves empty list', async () => {
     const userId = new UserId()
-    const user = User.create(
-      {
-        name: 'test-name',
-        registeredAt: new Date()
-      },
-      userId
-    )
+    const user = createDummyUser({}, userId)
     givenUserRepositoryFindAllByIdsResolvesUser(user)
     givenPostRepositoryFindAllResolvesEmptyList()
 
@@ -68,13 +60,7 @@ describe('ListPostsByAuthorIdUseCase', () => {
 
   it('returns post list when given post repository resolves posts', async () => {
     const userId = new UserId()
-    const user = User.create(
-      {
-        name: 'test-name',
-        registeredAt: new Date()
-      },
-      userId
-    )
+    const user = createDummyUser({}, userId)
     givenUserRepositoryFindAllByIdsResolvesUser(user)
     const posts = createDummyPostsOrderByCreatedAt(2, userId)
     givenPostRepositoryFindAllResolvesPosts(posts)
