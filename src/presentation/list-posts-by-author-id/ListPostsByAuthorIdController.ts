@@ -18,6 +18,7 @@ import {
 import _ from 'lodash'
 import {
   ListPostsByAuthorIdError,
+  ListPostsByAuthorIdErrorCodes,
   ListPostsByAuthorIdUseCase
 } from '../../application/list-posts-by-author-id'
 
@@ -87,7 +88,7 @@ export class ListPostsByAuthorIdController {
     } catch (error) {
       if (error instanceof ListPostsByAuthorIdError) {
         switch (error.code) {
-          case 'AUTHOR_NOT_FOUND':
+          case ListPostsByAuthorIdErrorCodes.NOT_FOUND:
             throw new NotFoundException()
         }
       }

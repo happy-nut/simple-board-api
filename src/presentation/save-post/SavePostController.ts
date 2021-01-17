@@ -17,7 +17,7 @@ import {
   Post,
   Put
 } from '@nestjs/common'
-import { SavePostError, SavePostUseCase } from '../../application/save-post'
+import { SavePostError, SavePostErrorCodes, SavePostUseCase } from '../../application/save-post'
 
 export class SavePostBody {
   @ApiProperty()
@@ -70,9 +70,9 @@ export class SavePostController {
     } catch (error) {
       if (error instanceof SavePostError) {
         switch (error.code) {
-          case 'AUTHOR_NOT_FOUND':
+          case SavePostErrorCodes.AUTHOR_NOT_FOUND:
             throw new NotFoundException('Author not found')
-          case 'POST_CREATING_FAILED':
+          case SavePostErrorCodes.FAILED_TO_CREATE:
             throw new InternalServerErrorException('Cannot create a post')
         }
       }
@@ -106,12 +106,12 @@ export class SavePostController {
     } catch (error) {
       if (error instanceof SavePostError) {
         switch (error.code) {
-          case 'AUTHOR_NOT_FOUND':
+          case SavePostErrorCodes.AUTHOR_NOT_FOUND:
             throw new NotFoundException('Author not found')
-          case 'POST_NOT_FOUND':
-            throw new NotFoundException('There is no post to update')
-          case 'POST_UPDATING_FAILED':
+          case SavePostErrorCodes.FAILED_TO_UPDATE:
             throw new InternalServerErrorException('Cannot update a post')
+          case SavePostErrorCodes.POST_NOT_FOUND:
+            throw new NotFoundException('There is no post to update')
         }
       }
 

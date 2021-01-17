@@ -1,7 +1,8 @@
 import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
-  ApiProperty, ApiTags
+  ApiProperty,
+  ApiTags
 } from '@nestjs/swagger'
 import {
   Body,
@@ -12,7 +13,11 @@ import {
   Logger,
   Post
 } from '@nestjs/common'
-import { CreateUserError, CreateUserUseCase } from '../../application/create-user'
+import {
+  CreateUserError,
+  CreateUserErrorCodes,
+  CreateUserUseCase
+} from '../../application/create-user'
 import { UserViewModel } from '../UserViewModel'
 
 export class CreateUserBody {
@@ -49,7 +54,7 @@ export class CreateUserController {
     } catch (error) {
       if (error instanceof CreateUserError) {
         switch (error.code) {
-          case 'USER_CREATING_FAILED':
+          case CreateUserErrorCodes.FAILED_TO_CREATE:
             // TODO: Is this really needed?
             throw new InternalServerErrorException('Failed to create a user')
         }

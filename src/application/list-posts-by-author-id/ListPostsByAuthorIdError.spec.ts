@@ -1,12 +1,12 @@
-import { ListPostsByAuthorIdError } from './ListPostsByAuthorIdError'
+import { ListPostsByAuthorIdError, ListPostsByAuthorIdErrorCodes } from './ListPostsByAuthorIdError'
 
 describe('ListPostsByAuthorIdError', () => {
   describe('.authorNotFound()', () => {
-    it('creates an ListPostsByAuthorIdError with code AUTHOR_NOT_FOUND', () => {
+    it('creates an ListPostsByAuthorIdError with code', () => {
       const error = ListPostsByAuthorIdError.authorNotFound()
 
       expect(error).toBeInstanceOf(ListPostsByAuthorIdError)
-      expect(error.code).toBe('AUTHOR_NOT_FOUND')
+      expect(error.code).toBe(ListPostsByAuthorIdErrorCodes.NOT_FOUND)
     })
   })
 })

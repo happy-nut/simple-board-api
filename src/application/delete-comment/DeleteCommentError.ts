@@ -1,9 +1,11 @@
 import { UseCaseError } from '../../shared/ddd'
 
-type ErrorCodes = 'DeleteCommentError.COMMENT_NOT_FOUND'
+export enum DeleteCommentErrorCodes {
+  NOT_FOUND
+}
 
-export class DeleteCommentError extends UseCaseError<ErrorCodes> {
+export class DeleteCommentError extends UseCaseError<DeleteCommentErrorCodes> {
   static commentNotFound (): DeleteCommentError {
-    return new DeleteCommentError('DeleteCommentError.COMMENT_NOT_FOUND')
+    return new DeleteCommentError(DeleteCommentErrorCodes.NOT_FOUND)
   }
 }

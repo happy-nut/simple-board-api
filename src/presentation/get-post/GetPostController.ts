@@ -14,7 +14,7 @@ import {
   NotFoundException,
   Param
 } from '@nestjs/common'
-import { GetPostError, GetPostUseCase } from '../../application/get-post'
+import { GetPostError, GetPostErrorCodes, GetPostUseCase } from '../../application/get-post'
 
 interface GetPostViewModelProps {
   id: string
@@ -84,10 +84,10 @@ export class GetPostController {
     } catch (error) {
       if (error instanceof GetPostError) {
         switch (error.code) {
-          case 'POST_NOT_FOUND':
-            throw new NotFoundException('Post not found')
-          case 'AUTHOR_NOT_FOUND':
+          case GetPostErrorCodes.AUTHOR_NOT_FOUND:
             throw new NotFoundException('Author not found')
+          case GetPostErrorCodes.POST_NOT_FOUND:
+            throw new NotFoundException('Post not found')
         }
       }
 

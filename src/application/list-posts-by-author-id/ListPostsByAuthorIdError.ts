@@ -1,9 +1,11 @@
 import { UseCaseError } from '../../shared/ddd'
 
-type ErrorCodes = 'AUTHOR_NOT_FOUND'
+export enum ListPostsByAuthorIdErrorCodes {
+  NOT_FOUND
+}
 
-export class ListPostsByAuthorIdError extends UseCaseError<ErrorCodes> {
+export class ListPostsByAuthorIdError extends UseCaseError<ListPostsByAuthorIdErrorCodes> {
   static authorNotFound (): ListPostsByAuthorIdError {
-    return new ListPostsByAuthorIdError('AUTHOR_NOT_FOUND')
+    return new ListPostsByAuthorIdError(ListPostsByAuthorIdErrorCodes.NOT_FOUND)
   }
 }

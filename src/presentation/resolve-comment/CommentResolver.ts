@@ -1,16 +1,26 @@
 import { Args, Field, InputType, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
-import { SaveCommentError, SaveCommentUseCase } from '../../application/save-comment'
-import { DeleteCommentError, DeleteCommentUseCase } from '../../application/delete-comment'
+import {
+  SaveCommentError,
+  SaveCommentErrorCodes,
+  SaveCommentUseCase
+} from '../../application/save-comment'
+import {
+  DeleteCommentError,
+  DeleteCommentErrorCodes,
+  DeleteCommentUseCase
+} from '../../application/delete-comment'
 import { CommentViewModel } from './CommentViewModel'
 import {
   ListCommentsByAuthorIdError,
+  ListCommentsByAuthorIdErrorCodes,
   ListCommentsByAuthorIdUseCase
 } from '../../application/list-comments-by-author-id'
 import _ from 'lodash'
 import {
   ListCommentsByPostIdError,
+  ListCommentsByPostIdErrorCodes,
   ListCommentsByPostIdUseCase
 } from '../../application/list-comments-by-post-id'
 
@@ -60,11 +70,11 @@ export class CommentResolver {
     } catch (error) {
       if (error instanceof SaveCommentError) {
         switch (error.code) {
-          case 'COMMENT_ERROR_COMMENT_NOT_FOUND':
+          case SaveCommentErrorCodes.COMMENT_NOT_FOUND:
             throw new GraphQLError('Comment not found')
-          case 'COMMENT_ERROR_AUTHOR_NOT_FOUND':
+          case SaveCommentErrorCodes.AUTHOR_NOT_FOUND:
             throw new GraphQLError('Author not found')
-          case 'COMMENT_ERROR_POST_NOT_FOUND':
+          case SaveCommentErrorCodes.POST_NOT_FOUND:
             throw new GraphQLError('Post not found')
         }
       }
@@ -82,7 +92,7 @@ export class CommentResolver {
     } catch (error) {
       if (error instanceof DeleteCommentError) {
         switch (error.code) {
-          case 'DeleteCommentError.COMMENT_NOT_FOUND':
+          case DeleteCommentErrorCodes.NOT_FOUND:
             throw new GraphQLError('Comment not found')
         }
       }
@@ -106,7 +116,7 @@ export class CommentResolver {
     } catch (error) {
       if (error instanceof ListCommentsByAuthorIdError) {
         switch (error.code) {
-          case 'ListCommentsByAuthorIdError.AUTHOR_NOT_FOUND':
+          case ListCommentsByAuthorIdErrorCodes.NOT_FOUND:
             throw new GraphQLError('Author not found')
         }
       }
@@ -134,7 +144,7 @@ export class CommentResolver {
     } catch (error) {
       if (error instanceof ListCommentsByPostIdError) {
         switch (error.code) {
-          case 'ListCommentsByPostIdError.POST_NOT_FOUND':
+          case ListCommentsByPostIdErrorCodes.NOT_FOUND:
             throw new GraphQLError('Post not found')
         }
       }

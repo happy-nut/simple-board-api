@@ -1,12 +1,17 @@
 import { Args, Field, InputType, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { GetPostError, GetPostUseCase } from '../../application/get-post'
+import { GetPostError, GetPostErrorCodes, GetPostUseCase } from '../../application/get-post'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
-import { SavePostError, SavePostUseCase } from '../../application/save-post'
-import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
+import { SavePostError, SavePostErrorCodes, SavePostUseCase } from '../../application/save-post'
+import {
+  DeletePostError,
+  DeletePostErrorCodes,
+  DeletePostUseCase
+} from '../../application/delete-post'
 import { PostViewModel } from './PostViewModel'
 import {
   ListPostsByAuthorIdError,
+    ListPostsByAuthorIdErrorCodes,
   ListPostsByAuthorIdUseCase
 } from '../../application/list-posts-by-author-id'
 import _ from 'lodash'
@@ -52,9 +57,9 @@ export class PostResolver {
     } catch (error) {
       if (error instanceof GetPostError) {
         switch (error.code) {
-          case 'AUTHOR_NOT_FOUND':
+          case GetPostErrorCodes.AUTHOR_NOT_FOUND:
             throw new GraphQLError('Author not found')
-          case 'POST_NOT_FOUND':
+          case GetPostErrorCodes.POST_NOT_FOUND:
             throw new GraphQLError('Post not found')
         }
       }
@@ -85,20 +90,20 @@ export class PostResolver {
     } catch (error) {
       if (error instanceof SavePostError) {
         switch (error.code) {
-          case 'AUTHOR_NOT_FOUND':
+          case SavePostErrorCodes.AUTHOR_NOT_FOUND:
             throw new GraphQLError('Author not found')
-          case 'POST_NOT_FOUND':
+          case SavePostErrorCodes.POST_NOT_FOUND:
             throw new GraphQLError('Post not found')
-          case 'POST_UPDATING_FAILED':
+          case SavePostErrorCodes.FAILED_TO_UPDATE:
             throw new GraphQLError('Failed to update post')
-          case 'POST_CREATING_FAILED':
+          case SavePostErrorCodes.FAILED_TO_CREATE:
             throw new GraphQLError('Failed to create post')
         }
       } else if (error instanceof GetPostError) {
         switch (error.code) {
-          case 'POST_NOT_FOUND':
+          case GetPostErrorCodes.POST_NOT_FOUND:
             throw new GraphQLError('Post not found')
-          case 'AUTHOR_NOT_FOUND':
+          case GetPostErrorCodes.AUTHOR_NOT_FOUND:
             throw new GraphQLError('Author not found')
         }
       }
@@ -116,7 +121,7 @@ export class PostResolver {
     } catch (error) {
       if (error instanceof DeletePostError) {
         switch (error.code) {
-          case 'DeletePostError.POST_NOT_FOUND':
+          case DeletePostErrorCodes.NOT_FOUND:
             throw new GraphQLError('Post not found')
         }
       }
@@ -141,7 +146,7 @@ export class PostResolver {
     } catch (error) {
       if (error instanceof ListPostsByAuthorIdError) {
         switch (error.code) {
-          case 'AUTHOR_NOT_FOUND':
+          case ListPostsByAuthorIdErrorCodes.NOT_FOUND:
             throw new GraphQLError('Author not found')
         }
       }

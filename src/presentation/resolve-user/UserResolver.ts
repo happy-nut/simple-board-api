@@ -1,8 +1,12 @@
 import { Args, Field, InputType, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { GetUserError, GetUserUseCase } from '../../application/get-user'
+import { GetUserError, GetUserErrorCodes, GetUserUseCase } from '../../application/get-user'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
-import { CreateUserError, CreateUserUseCase } from '../../application/create-user'
+import {
+  CreateUserError,
+  CreateUserErrorCodes,
+  CreateUserUseCase
+} from '../../application/create-user'
 import { UserViewModel } from './UserViewModel'
 
 @InputType()
@@ -32,7 +36,7 @@ export class UserResolver {
     } catch (error) {
       if (error instanceof GetUserError) {
         switch (error.code) {
-          case 'USER_NOT_FOUND':
+          case GetUserErrorCodes.NOT_FOUND:
             throw new GraphQLError(`User not found with ID: ${id}`)
         }
       }
@@ -54,7 +58,7 @@ export class UserResolver {
     } catch (error) {
       if (error instanceof CreateUserError) {
         switch (error.code) {
-          case 'USER_CREATING_FAILED':
+          case CreateUserErrorCodes.FAILED_TO_CREATE:
             throw new GraphQLError('Failed to create a user')
         }
       }

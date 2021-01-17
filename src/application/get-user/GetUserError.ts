@@ -1,9 +1,11 @@
 import { UseCaseError } from '../../shared/ddd'
 
-type ErrorCodes = 'USER_NOT_FOUND'
+export enum GetUserErrorCodes {
+  NOT_FOUND
+}
 
-export class GetUserError extends UseCaseError<ErrorCodes> {
+export class GetUserError extends UseCaseError<GetUserErrorCodes> {
   static useNotFound (): GetUserError {
-    return new GetUserError('USER_NOT_FOUND')
+    return new GetUserError(GetUserErrorCodes.NOT_FOUND)
   }
 }

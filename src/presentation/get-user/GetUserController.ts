@@ -15,7 +15,7 @@ import {
   Param
 } from '@nestjs/common'
 import { UserViewModel } from '../UserViewModel'
-import { GetUserError, GetUserUseCase } from '../../application/get-user'
+import { GetUserError, GetUserErrorCodes, GetUserUseCase } from '../../application/get-user'
 
 
 class GetUserViewModel extends UserViewModel {
@@ -48,7 +48,7 @@ export class GetUserController {
     } catch (error) {
       if (error instanceof GetUserError) {
         switch (error.code) {
-          case 'USER_NOT_FOUND':
+          case GetUserErrorCodes.NOT_FOUND:
             throw new NotFoundException()
         }
       }

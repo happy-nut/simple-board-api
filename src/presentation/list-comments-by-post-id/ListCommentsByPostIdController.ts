@@ -19,6 +19,7 @@ import {
 import _ from 'lodash'
 import {
   ListCommentsByPostIdError,
+  ListCommentsByPostIdErrorCodes,
   ListCommentsByPostIdUseCase
 } from '../../application/list-comments-by-post-id'
 import { ApiImplicitQuery } from '@nestjs/swagger/dist/decorators/api-implicit-query.decorator'
@@ -97,7 +98,7 @@ export class ListCommentsByPostIdController {
     } catch (error) {
       if (error instanceof ListCommentsByPostIdError) {
         switch (error.code) {
-          case 'ListCommentsByPostIdError.POST_NOT_FOUND':
+          case ListCommentsByPostIdErrorCodes.NOT_FOUND:
             throw new NotFoundException()
         }
       }

@@ -17,7 +17,11 @@ import {
   Post,
   Put
 } from '@nestjs/common'
-import { SaveCommentError, SaveCommentUseCase } from '../../application/save-Comment'
+import {
+  SaveCommentError,
+  SaveCommentErrorCodes,
+  SaveCommentUseCase
+} from '../../application/save-Comment'
 
 export class SaveCommentBody {
   @ApiProperty()
@@ -70,9 +74,9 @@ export class SaveCommentController {
     } catch (error) {
       if (error instanceof SaveCommentError) {
         switch (error.code) {
-          case 'COMMENT_ERROR_AUTHOR_NOT_FOUND':
+          case SaveCommentErrorCodes.AUTHOR_NOT_FOUND:
             throw new NotFoundException('Author not found')
-          case 'COMMENT_ERROR_POST_NOT_FOUND':
+          case SaveCommentErrorCodes.POST_NOT_FOUND:
             throw new NotFoundException('Post not found')
         }
       }
@@ -106,12 +110,12 @@ export class SaveCommentController {
     } catch (error) {
       if (error instanceof SaveCommentError) {
         switch (error.code) {
-          case 'COMMENT_ERROR_POST_NOT_FOUND':
+          case SaveCommentErrorCodes.AUTHOR_NOT_FOUND:
             throw new NotFoundException('Author not found')
-          case 'COMMENT_ERROR_AUTHOR_NOT_FOUND':
-            throw new NotFoundException('Post not found')
-          case 'COMMENT_ERROR_COMMENT_NOT_FOUND':
+          case SaveCommentErrorCodes.COMMENT_NOT_FOUND:
             throw new NotFoundException('Comment not found')
+          case SaveCommentErrorCodes.POST_NOT_FOUND:
+            throw new NotFoundException('Post not found')
         }
       }
 

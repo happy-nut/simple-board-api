@@ -1,12 +1,12 @@
-import { GetUserError } from './GetUserError'
+import { GetUserError, GetUserErrorCodes } from './GetUserError'
 
 describe('GetUserError', () => {
   describe('.useNotFound()', () => {
-    it('creates an GetUserError with code USER_NOT_FOUND', () => {
+    it('creates an GetUserError with code', () => {
       const error = GetUserError.useNotFound()
 
       expect(error).toBeInstanceOf(GetUserError)
-      expect(error.code).toBe('USER_NOT_FOUND')
+      expect(error.code).toBe(GetUserErrorCodes.NOT_FOUND)
     })
   })
 })

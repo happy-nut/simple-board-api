@@ -1,12 +1,15 @@
-import { ListCommentsByPostIdError } from './ListCommentsByPostIdError'
+import {
+  ListCommentsByPostIdError,
+  ListCommentsByPostIdErrorCodes
+} from './ListCommentsByPostIdError'
 
 describe('ListCommentsByPostIdError', () => {
   describe('.postNotFound()', () => {
-    it('creates an ListCommentsByPostIdError with code POST_NOT_FOUND', () => {
+    it('creates an ListCommentsByPostIdError with code', () => {
       const error = ListCommentsByPostIdError.postNotFound()
 
       expect(error).toBeInstanceOf(ListCommentsByPostIdError)
-      expect(error.code).toBe('ListCommentsByPostIdError.POST_NOT_FOUND')
+      expect(error.code).toBe(ListCommentsByPostIdErrorCodes.NOT_FOUND)
     })
   })
 })

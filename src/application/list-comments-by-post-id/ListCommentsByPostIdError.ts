@@ -1,9 +1,11 @@
 import { UseCaseError } from '../../shared/ddd'
 
-type ErrorCodes = 'ListCommentsByPostIdError.POST_NOT_FOUND'
+export enum ListCommentsByPostIdErrorCodes {
+  NOT_FOUND
+}
 
-export class ListCommentsByPostIdError extends UseCaseError<ErrorCodes> {
+export class ListCommentsByPostIdError extends UseCaseError<ListCommentsByPostIdErrorCodes> {
   static postNotFound (): ListCommentsByPostIdError {
-    return new ListCommentsByPostIdError('ListCommentsByPostIdError.POST_NOT_FOUND')
+    return new ListCommentsByPostIdError(ListCommentsByPostIdErrorCodes.NOT_FOUND)
   }
 }

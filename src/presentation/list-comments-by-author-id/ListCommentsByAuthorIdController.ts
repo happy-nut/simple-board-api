@@ -18,6 +18,7 @@ import {
 import _ from 'lodash'
 import {
   ListCommentsByAuthorIdError,
+  ListCommentsByAuthorIdErrorCodes,
   ListCommentsByAuthorIdUseCase
 } from '../../application/list-comments-by-author-id'
 
@@ -81,7 +82,7 @@ export class ListCommentsByAuthorIdController {
     } catch (error) {
       if (error instanceof ListCommentsByAuthorIdError) {
         switch (error.code) {
-          case 'ListCommentsByAuthorIdError.AUTHOR_NOT_FOUND':
+          case ListCommentsByAuthorIdErrorCodes.NOT_FOUND:
             throw new NotFoundException()
         }
       }

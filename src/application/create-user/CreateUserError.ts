@@ -1,9 +1,11 @@
 import { UseCaseError } from '../../shared/ddd'
 
-type ErrorCodes = 'USER_CREATING_FAILED'
+export enum CreateUserErrorCodes {
+  FAILED_TO_CREATE
+}
 
-export class CreateUserError extends UseCaseError<ErrorCodes> {
+export class CreateUserError extends UseCaseError<CreateUserErrorCodes> {
   static userCreatingFailed (): CreateUserError {
-    return new CreateUserError('USER_CREATING_FAILED')
+    return new CreateUserError(CreateUserErrorCodes.FAILED_TO_CREATE)
   }
 }

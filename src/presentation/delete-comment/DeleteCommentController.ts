@@ -7,7 +7,11 @@ import {
   Param
 } from '@nestjs/common'
 import { ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiTags } from '@nestjs/swagger'
-import { DeleteCommentError, DeleteCommentUseCase } from '../../application/delete-comment'
+import {
+  DeleteCommentError,
+  DeleteCommentErrorCodes,
+  DeleteCommentUseCase
+} from '../../application/delete-comment'
 
 type DeleteCommentViewModel = void
 
@@ -29,7 +33,7 @@ export class DeleteCommentController {
     } catch (error) {
       if (error instanceof DeleteCommentError) {
         switch (error.code) {
-          case 'DeleteCommentError.COMMENT_NOT_FOUND':
+          case DeleteCommentErrorCodes.NOT_FOUND:
             throw new NotFoundException()
         }
       }

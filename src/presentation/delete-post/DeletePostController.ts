@@ -6,7 +6,11 @@ import {
   NotFoundException,
   Param
 } from '@nestjs/common'
-import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
+import {
+  DeletePostError,
+  DeletePostErrorCodes,
+  DeletePostUseCase
+} from '../../application/delete-post'
 import { ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiTags } from '@nestjs/swagger'
 
 type DeletePostViewModel = void
@@ -29,7 +33,7 @@ export class DeletePostController {
     } catch (error) {
       if (error instanceof DeletePostError) {
         switch (error.code) {
-          case 'DeletePostError.POST_NOT_FOUND':
+          case DeletePostErrorCodes.NOT_FOUND:
             throw new NotFoundException()
         }
       }
