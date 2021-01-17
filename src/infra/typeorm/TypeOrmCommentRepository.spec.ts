@@ -7,8 +7,7 @@ import { DatabaseModule } from '../../modules'
 import { CommentId } from '../../domain/CommentId'
 import {
   createDummyComment,
-  createDummyCommentsOrderByCreatedAt,
-  createDummyPostsOrderByCreatedAt
+  createDummyCommentsOrderByCreatedAt
 } from '../../../test/support/utils'
 import { UserId } from '../../domain/UserId'
 import { PostId } from '../../domain/PostId'
@@ -132,6 +131,26 @@ describe('TypeOrmCommentRepository', () => {
       expect(updated.content).toBe('new-content')
       expect(updated.postId.equals(comment.postId)).toBeTrue()
       expect(updated.authorId.equals(comment.authorId)).toBeTrue()
+    })
+  })
+
+  describe('.removeOne', () => {
+    it('removes nothing and resolves undefined' +
+      ' when there is no comment corresponding given ID', async () => {
+      const comment = createDummyComment()
+      const result = await uut.removeOne(comment)
+
+      expect(result).toBeUndefined()
+    })
+
+    it('removes a post', async () => {
+      const comment = createDummyComment()
+      await uut.save(comment)
+
+      await uut.removeOne(comment)
+
+      const found = await uut.findOneById(comment.id)
+      expect(found).toBeUndefined()
     })
   })
 })

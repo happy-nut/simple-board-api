@@ -53,4 +53,9 @@ export class TypeOrmCommentRepository implements CommentRepository {
     const saved = await this.repository.save(entity)
     return CommentEntityMapper.toDomain(saved)
   }
+
+  async removeOne (comment: Comment): Promise<void> {
+    const entity = CommentEntityMapper.fromDomain(comment)
+    await this.repository.remove(entity)
+  }
 }

@@ -6,7 +6,7 @@ import { TypeOrmPostRepository } from './TypeOrmPostRepository'
 import _ from 'lodash'
 import { PostEntity } from './entities'
 import { DatabaseModule } from '../../modules'
-import { createDummyPostsOrderByCreatedAt } from '../../../test/support/utils'
+import { createDummyPost, createDummyPostsOrderByCreatedAt } from '../../../test/support/utils'
 import { PostId } from '../../domain/PostId'
 
 describe('TypeOrmPostRepository', () => {
@@ -95,11 +95,7 @@ describe('TypeOrmPostRepository', () => {
     })
 
     it('finds a post when there is a post that has given ID', async () => {
-      const post = Post.createNew({
-        content: 'test-content',
-        title: 'test-title',
-        authorId: new UserId('test-user-id')
-      })
+      const post = createDummyPost()
       await uut.save(post)
 
       const found = await uut.findOneById(post.id) as Post
@@ -130,11 +126,7 @@ describe('TypeOrmPostRepository', () => {
 
   describe('.save', () => {
     it('crates a post', async () => {
-      const post = Post.createNew({
-        content: 'test-content',
-        title: 'test-title',
-        authorId: new UserId('test-user-id')
-      })
+      const post = createDummyPost()
 
       const created = await uut.save(post) as Post
 
@@ -147,10 +139,8 @@ describe('TypeOrmPostRepository', () => {
 
     it('updates a post', async () => {
       const now = new Date()
-      const post = Post.createNew({
-        content: 'test-content',
-        title: 'test-title',
-        authorId: new UserId('test-user-id')
+      const post = createDummyPost({
+        createdAt: now
       })
       await uut.save(post)
       const postWithSameId = Post.create(
@@ -158,7 +148,7 @@ describe('TypeOrmPostRepository', () => {
           createdAt: now,
           content: 'test-content-2',
           title: 'test-title-2',
-          authorId: new UserId('test-user-id')
+          authorId: post.authorId
         },
         post.id
       )
@@ -176,22 +166,14 @@ describe('TypeOrmPostRepository', () => {
   describe('.removeOne', () => {
     it('removes nothing and resolves undefined' +
       ' when there is no post corresponding given ID', async () => {
-      const post = Post.createNew({
-        content: 'test-content',
-        title: 'test-title',
-        authorId: new UserId('test-user-id')
-      })
+      const post = createDummyPost()
       const result = await uut.removeOne(post)
 
       expect(result).toBeUndefined()
     })
 
     it('removes a post', async () => {
-      const post = Post.createNew({
-        content: 'test-content',
-        title: 'test-title',
-        authorId: new UserId('test-user-id')
-      })
+      const post = createDummyPost()
       await uut.save(post)
 
       await uut.removeOne(post)

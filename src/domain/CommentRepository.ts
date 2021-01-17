@@ -13,4 +13,6 @@ export interface CommentRepository {
   findAllByPostId (postId: PostId, skip: number, take: number): Promise<Comment[]>
 
   save (comment: Comment): Promise<Comment>
+
+  removeOne (comment: Comment): Promise<void>
 }
