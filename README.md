@@ -29,13 +29,13 @@ DB는 RDB/NoSQL 어떤 것을 이용해도 됩니다. firebase처럼 serverless 
 ### Model Specs
 
 - [x] Post는 ID, 작성자, 제목, 내용, 작성일을 가집니다.
-- [ ] Post는 여러 Comment를 가질 수 있습니다. (1:N).
-- [ ] Comment는 ID, 작성자, 내용, 작성일을 가집니다.
+- [x] Post는 여러 Comment를 가질 수 있습니다. (1:N).
+- [x] Comment는 ID, 작성자, 내용, 작성일을 가집니다.
 - [x] User는 이름, 가입일을 가집니다.
 - [x] User는 여러 Post를 가질 수 있습니다. (1:N)
-- [ ] User는 여러 Comment를 가질 수 있습니다. (1:N)
+- [x] User는 여러 Comment를 가질 수 있습니다. (1:N)
 - [x] Post는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
-- [ ] Comment는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
+- [x] Comment는 생성할 때, User ID를 받아 작성자를 저장하고 현재 시간을 작성일로 저장합니다.
 
 ### API Specs
 
@@ -43,9 +43,9 @@ DB는 RDB/NoSQL 어떤 것을 이용해도 됩니다. firebase처럼 serverless 
 
 - [x] User CR 가능
 - [x] Post CRUD 가능
-- [ ] Comment CRUD 가능
+- [x] Comment CRUD 가능
 - [x] 특정 User가 작성한 모든 Post를 조회할 수 있어야 합니다.
-- [ ] 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
+- [x] 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
 - [ ] 특정 Post에 달린 Comment를 조회할 수 있어야 하며, 페이지네이션이 가능하여야 합니다.
 
 #### GraphQL API
