@@ -72,14 +72,14 @@ describe('ListCommentsByAuthorIdUseCase', () => {
     expect(response).toEqual([
       {
         id: comments[0].id.value,
-        authorId: userId.value,
+        postId: comments[0].postId.value,
         username: user.name,
         content: comments[0].content,
         createdAt: comments[0].createdAt
       },
       {
         id: comments[1].id.value,
-        authorId: userId.value,
+        postId: comments[1].postId.value,
         username: user.name,
         content: comments[1].content,
         createdAt: comments[1].createdAt

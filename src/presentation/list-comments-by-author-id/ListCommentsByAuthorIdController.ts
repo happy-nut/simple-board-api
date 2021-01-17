@@ -16,31 +16,27 @@ import {
 } from '@nestjs/common'
 import _ from 'lodash'
 import {
-  ListPostsByAuthorIdError,
-  ListPostsByAuthorIdUseCase
-} from '../../application/list-posts-by-author-id'
+  ListCommentsByAuthorIdError,
+  ListCommentsByAuthorIdUseCase
+} from '../../application/list-comments-by-author-id'
 
-interface ListPostsByAuthorIdViewModelProps {
+interface ListCommentsByAuthorIdViewModelProps {
   id: string
   authorId: string
   authorName: string
-  title: string
   content: string
   createdAt: Date
 }
 
-class ListPostsByAuthorIdViewModel {
+class ListCommentsByAuthorIdViewModel {
   @ApiProperty({ type: String })
   id: string
 
   @ApiProperty({ type: String })
-  authorId: string
+  postId: string
 
   @ApiProperty({ type: String })
   authorName: string
-
-  @ApiProperty({ type: String })
-  title: string
 
   @ApiProperty({ type: String })
   content: string
@@ -48,42 +44,40 @@ class ListPostsByAuthorIdViewModel {
   @ApiProperty({ type: Date })
   createdAt: Date
 
-  constructor (props: ListPostsByAuthorIdViewModelProps) {
+  constructor (props: ListCommentsByAuthorIdViewModelProps) {
     this.id = props.id
     this.authorName = props.authorName
-    this.authorId = props.authorId
-    this.title = props.title
+    this.postId = props.authorId
     this.content = props.content
     this.createdAt = props.createdAt
   }
 }
 
 @Controller()
-export class ListPostsByAuthorIdController {
+export class ListCommentsByAuthorIdController {
   constructor (
-    private readonly listPostsByAuthorIdUseCase: ListPostsByAuthorIdUseCase,
+    private readonly ListCommentsByAuthorIdUseCase: ListCommentsByAuthorIdUseCase,
     private readonly logger: Logger
   ) {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('users/:userId/posts')
-  @ApiOkResponse({ type: [ListPostsByAuthorIdViewModel] })
+  @Get('users/:userId/comments')
+  @ApiOkResponse({ type: [ListCommentsByAuthorIdViewModel] })
   @ApiNotFoundResponse({ description: 'author not found' })
   @ApiInternalServerErrorResponse()
-  async list (@Param('userId') userId: string): Promise<ListPostsByAuthorIdViewModel[]> {
+  async list (@Param('authorId') authorId: string): Promise<ListCommentsByAuthorIdViewModel[]> {
     try {
-      const posts = await this.listPostsByAuthorIdUseCase.execute({ userId })
-      return _.map(posts, (post) => ({
-        id: post.id,
-        title: post.title,
-        content: post.content,
-        authorId: post.authorId,
-        authorName: post.username,
-        createdAt: post.createdAt
+      const responses = await this.ListCommentsByAuthorIdUseCase.execute({ authorId })
+      return _.map(responses, (response) => ({
+        id: response.id,
+        content: response.content,
+        postId: response.postId,
+        authorName: response.username,
+        createdAt: response.createdAt
       }))
     } catch (error) {
-      if (error instanceof ListPostsByAuthorIdError) {
+      if (error instanceof ListCommentsByAuthorIdError) {
         switch (error.code) {
           case 'AUTHOR_NOT_FOUND':
             throw new NotFoundException()

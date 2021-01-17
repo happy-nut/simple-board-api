@@ -3,30 +3,30 @@ import request from 'supertest'
 import { HttpStatus, INestApplication, Logger } from '@nestjs/common'
 import { mock, MockProxy } from 'jest-mock-extended'
 import {
-  ListPostsByAuthorIdError,
-  ListPostsByAuthorIdResponse,
-  ListPostsByAuthorIdUseCase
-} from '../../application/list-posts-by-author-id'
-import { ListPostsByAuthorIdController } from './ListPostsByAuthorIdController'
+  ListCommentsByAuthorIdError,
+  ListCommentsByAuthorIdResponse,
+  ListCommentsByAuthorIdUseCase
+} from '../../application/list-comments-by-author-id'
+import { ListCommentsByAuthorIdController } from './ListCommentsByAuthorIdController'
 import { UserId } from '../../domain/UserId'
-import { createDummyPostsOrderByCreatedAt } from '../../../test/support/utils'
+import { createDummyCommentsOrderByCreatedAt } from '../../../test/support/utils'
 
-describe('ListPostsByAuthorIdController', () => {
+describe('ListCommentsByAuthorIdController', () => {
   let testingModule: TestingModule
   let app: INestApplication
   let uut: unknown
-  let useCase: MockProxy<ListPostsByAuthorIdUseCase>
+  let useCase: MockProxy<ListCommentsByAuthorIdUseCase>
   let logger: MockProxy<Logger>
 
   function givenUseCaseRejectsWithAuthorNotFoundError () {
-    useCase.execute.mockRejectedValueOnce(ListPostsByAuthorIdError.authorNotFound())
+    useCase.execute.mockRejectedValueOnce(ListCommentsByAuthorIdError.authorNotFound())
   }
 
   function givenUseCaseRejectsWithUnknownError () {
     useCase.execute.mockRejectedValueOnce(new Error('unknown'))
   }
 
-  function givenUseCaseResolvesResponse (result: ListPostsByAuthorIdResponse) {
+  function givenUseCaseResolvesResponse (result: ListCommentsByAuthorIdResponse) {
     useCase.execute.mockResolvedValueOnce(result)
   }
 
@@ -35,10 +35,10 @@ describe('ListPostsByAuthorIdController', () => {
     logger = mock()
     testingModule = await Test
       .createTestingModule({
-        controllers: [ListPostsByAuthorIdController],
+        controllers: [ListCommentsByAuthorIdController],
         providers: [
           {
-            provide: ListPostsByAuthorIdUseCase,
+            provide: ListCommentsByAuthorIdUseCase,
             useValue: useCase
           },
           {
@@ -64,7 +64,7 @@ describe('ListPostsByAuthorIdController', () => {
     givenUseCaseRejectsWithAuthorNotFoundError()
 
     const response = await request(uut)
-      .get(`/users/${new UserId().value}/posts`)
+      .get(`/users/${new UserId().value}/comments`)
 
     expect(response.status).toBe(HttpStatus.NOT_FOUND)
   })
@@ -74,7 +74,7 @@ describe('ListPostsByAuthorIdController', () => {
     givenUseCaseRejectsWithUnknownError()
 
     const response = await request(uut)
-      .get(`/users/${new UserId().value}/posts`)
+      .get(`/users/${new UserId().value}/comments`)
 
     expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR)
     expect(logger.error).toHaveBeenCalled()
@@ -82,45 +82,41 @@ describe('ListPostsByAuthorIdController', () => {
 
   it('responds 200 OK when given use case resolved a user', async () => {
     const userId = new UserId()
-    const posts = createDummyPostsOrderByCreatedAt(2, userId)
-    const useCaseResponse: ListPostsByAuthorIdResponse = [
+    const comments = createDummyCommentsOrderByCreatedAt(2, userId)
+    const useCaseResponse: ListCommentsByAuthorIdResponse = [
       {
-        createdAt: posts[0].createdAt,
+        createdAt: comments[0].createdAt,
         username: 'test-username',
-        title: posts[0].title,
-        content: posts[0].content,
-        id: posts[0].id.value,
-        authorId: userId.value
+        content: comments[0].content,
+        id: comments[0].id.value,
+        postId: comments[0].postId.value
       },
       {
-        createdAt: posts[1].createdAt,
+        createdAt: comments[1].createdAt,
         username: 'test-username',
-        title: posts[1].title,
-        content: posts[1].content,
-        id: posts[1].id.value,
-        authorId: userId.value
+        content: comments[1].content,
+        id: comments[1].id.value,
+        postId: comments[1].postId.value
       }
     ]
     givenUseCaseResolvesResponse(useCaseResponse)
 
     const response = await request(uut)
-      .get(`/users/${userId.value}/posts`)
+      .get(`/users/${userId.value}/comments`)
 
     expect(response.status).toBe(HttpStatus.OK)
     expect(response.body).toEqual([
       {
         createdAt: useCaseResponse[0].createdAt.toISOString(),
         authorName: useCaseResponse[0].username,
-        authorId: useCaseResponse[0].authorId,
-        title: useCaseResponse[0].title,
+        postId: comments[0].postId.value,
         content: useCaseResponse[0].content,
         id: useCaseResponse[0].id
       },
       {
         createdAt: useCaseResponse[1].createdAt.toISOString(),
         authorName: useCaseResponse[1].username,
-        authorId: useCaseResponse[1].authorId,
-        title: useCaseResponse[1].title,
+        postId: comments[1].postId.value,
         content: useCaseResponse[1].content,
         id: useCaseResponse[1].id
       },

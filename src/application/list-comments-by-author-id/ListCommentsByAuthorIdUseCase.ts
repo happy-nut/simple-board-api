@@ -11,7 +11,7 @@ interface ListCommentsByAuthorIdRequest {
 
 interface Comment {
   id: string
-  authorId: string
+  postId: string
   username: string
   content: string
   createdAt: Date
@@ -38,7 +38,7 @@ implements UseCase<ListCommentsByAuthorIdRequest, ListCommentsByAuthorIdResponse
     const comments = await this.commentRepository.findAllByUserId(userId)
     return _.map(comments, (comment) => ({
       id: comment.id.value,
-      authorId: user.id.value,
+      postId: comment.postId.value,
       username: user.name,
       content: comment.content,
       createdAt: comment.createdAt
