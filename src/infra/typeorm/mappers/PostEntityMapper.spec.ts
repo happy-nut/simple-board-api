@@ -1,7 +1,7 @@
 import { Post } from '../../../domain/Post'
 import { PostEntityMapper } from './PostEntityMapper'
 import { UserId } from '../../../domain/UserId'
-import { PostEntity } from '../entities/PostEntity'
+import { PostEntity } from '../entities'
 import { PostId } from '../../../domain/PostId'
 
 describe('PostEntityMapper', () => {

@@ -1,15 +1,18 @@
 import { UserId } from './UserId'
 import { AggregateRoot } from '../shared/ddd'
 import { CommentId } from './CommentId'
+import { PostId } from './PostId'
 
 export interface CommentProps {
   authorId: UserId
+  postId: PostId
   createdAt: Date
   content: string
 }
 
 interface CommentCreateNewProps {
   authorId: UserId
+  postId: PostId
   content: string
 }
 
@@ -30,6 +33,10 @@ export class Comment extends AggregateRoot<CommentProps> {
 
   get authorId (): UserId {
     return this.props.authorId
+  }
+
+  get postId (): PostId {
+    return this.props.postId
   }
 
   get content (): string {
