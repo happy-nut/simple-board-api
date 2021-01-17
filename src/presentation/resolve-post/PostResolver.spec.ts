@@ -14,6 +14,12 @@ import {
 import json5 from 'json5'
 import { createDummyPost } from '../../../test/support/utils'
 import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
+import {
+  ListPostsByAuthorIdError,
+  ListPostsByAuthorIdResponse,
+  ListPostsByAuthorIdUseCase
+} from '../../application/list-posts-by-author-id'
+import { UserId } from '../../domain/UserId'
 
 describe('PostResolver', () => {
   let testingModule: TestingModule
@@ -22,6 +28,7 @@ describe('PostResolver', () => {
   let getPostUseCase: MockProxy<GetPostUseCase>
   let savePostUseCase: MockProxy<SavePostUseCase>
   let deletePostUseCase: MockProxy<DeletePostUseCase>
+  let listPostsByAuthorIdUseCase: MockProxy<ListPostsByAuthorIdUseCase>
   let logger: MockProxy<Logger>
 
   function givenGetUseCaseRejectedWithPostNotFoundError (): void {
@@ -56,40 +63,20 @@ describe('PostResolver', () => {
     deletePostUseCase.execute.mockResolvedValueOnce()
   }
 
-  function createPostQuery (postId: string): string {
-    return `
-      {
-        getPost (id: "${postId}") {
-          id, authorId, authorName, title, content, createdAt
-        }
-      }
-    `
+  function givenListPostsByAuthorIdUseCaseRejectedWithAuthorNotFoundError (): void {
+    listPostsByAuthorIdUseCase.execute
+      .mockRejectedValueOnce(ListPostsByAuthorIdError.authorNotFound())
   }
 
-  function createPostSaveMutation (input: SavePostInput): string {
-    return `
-      mutation {
-        savePost (input: ${json5.stringify(input, { quote: '"' })}) {
-          id, authorId, authorName, title, content, createdAt
-        }
-      }
-    `
-  }
-
-  function createPostRemoveMutation (postId: string): string {
-    return `
-      mutation {
-        removePost (id: "${postId}") {
-          id, authorId, authorName, title, content, createdAt
-        }
-      }
-    `
+  function givenListPostsByAuthorIdUseCaseResolved (response: ListPostsByAuthorIdResponse): void {
+    listPostsByAuthorIdUseCase.execute.mockResolvedValueOnce(response)
   }
 
   beforeEach(async () => {
     getPostUseCase = mock()
     savePostUseCase = mock()
     deletePostUseCase = mock()
+    listPostsByAuthorIdUseCase = mock()
     logger = mock()
     testingModule = await Test
       .createTestingModule({
@@ -107,6 +94,10 @@ describe('PostResolver', () => {
           {
             provide: DeletePostUseCase,
             useValue: deletePostUseCase
+          },
+          {
+            provide: ListPostsByAuthorIdUseCase,
+            useValue: listPostsByAuthorIdUseCase
           },
           {
             provide: Logger,
@@ -127,6 +118,16 @@ describe('PostResolver', () => {
   })
 
   describe('.getPost()', () => {
+    function createPostQuery (postId: string): string {
+      return `
+        {
+          getPost (id: "${postId}") {
+            id, authorId, authorName, title, content, createdAt
+          }
+        }
+      `
+    }
+
     it('responds with errors when post of given ID does not exist', async () => {
       givenGetUseCaseRejectedWithPostNotFoundError()
       const postId = new PostId().value
@@ -203,6 +204,16 @@ describe('PostResolver', () => {
   })
 
   describe('.savePost()', () => {
+    function createPostSaveMutation (input: SavePostInput): string {
+      return `
+        mutation {
+          savePost (input: ${json5.stringify(input, { quote: '"' })}) {
+            id, authorId, authorName, title, content, createdAt
+          }
+        }
+      `
+    }
+
     it('responds error when given post case rejected with PostNotFoundError', async () => {
       givenSaveUseCaseRejectedWithPostNotFoundError()
       const input: SavePostInput = {
@@ -358,7 +369,17 @@ describe('PostResolver', () => {
   })
 
   describe('.removePost()', () => {
-    it('responds error when given delete case rejected with PostNotFoundError', async () => {
+    function createPostRemoveMutation (postId: string): string {
+      return `
+        mutation {
+          removePost (id: "${postId}") {
+            id, authorId, authorName, title, content, createdAt
+          }
+        }
+      `
+    }
+
+    it('responds error when given delete use case rejected with PostNotFoundError', async () => {
       givenDeleteUseCaseRejectedWithPostNotFoundError()
       const postId = new PostId().value
       const mutation = createPostRemoveMutation(postId)
@@ -380,7 +401,7 @@ describe('PostResolver', () => {
       }))
     })
 
-    it('responds null when given delete case resolved', async () => {
+    it('responds null when given delete use case resolved', async () => {
       givenDeleteUseCaseResolved()
       const postId = new PostId().value
       const mutation = createPostRemoveMutation(postId)
@@ -396,6 +417,93 @@ describe('PostResolver', () => {
       expect(response.status).toBe(HttpStatus.OK)
       expect(response.body.data).toEqual({
         removePost: null
+      })
+      expect(response.body.errors).toBeUndefined()
+    })
+  })
+
+  describe('.listPostsByAuthorId()', () => {
+    function createListPostsByAuthorIdQuery (userId: string) {
+      return `
+        {
+          listPostsByAuthorId (authorId: "${userId}") {
+            id, authorId, authorName, title, content, createdAt
+          }
+        }
+      `
+    }
+
+    it('responds error when given list use case rejected with AuthorNotFoundError', async () => {
+      givenListPostsByAuthorIdUseCaseRejectedWithAuthorNotFoundError()
+      const userId = new UserId().value
+      const query = createListPostsByAuthorIdQuery(userId)
+
+      const response = await request(uut)
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query
+        })
+
+      expect(listPostsByAuthorIdUseCase.execute).toHaveBeenCalledWith({ userId })
+      expect(response.status).toBe(HttpStatus.OK)
+      expect(response.body.data).toBeNull()
+      expect(response.body.errors[0]).toEqual(expect.objectContaining({
+        message: 'Author not found'
+      }))
+    })
+
+    it('responds posts when given list use case resolved', async () => {
+      const listResponse: ListPostsByAuthorIdResponse = [
+        {
+          createdAt: new Date(),
+          content: 'test-content-1',
+          authorId: new UserId().value,
+          title: 'test-title-1',
+          username: 'test-username-1',
+          id: 'test-id-1'
+        },
+        {
+          createdAt: new Date(),
+          content: 'test-content-2',
+          authorId: new UserId().value,
+          title: 'test-title-2',
+          username: 'test-username-2',
+          id: 'test-id-2'
+        }
+      ]
+      givenListPostsByAuthorIdUseCaseResolved(listResponse)
+      const userId = new UserId().value
+      const query = createListPostsByAuthorIdQuery(userId)
+
+      const response = await request(uut)
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query
+        })
+
+      expect(listPostsByAuthorIdUseCase.execute).toHaveBeenCalledWith({ userId })
+      expect(response.status).toBe(HttpStatus.OK)
+      expect(response.body.data).toEqual({
+        listPostsByAuthorId: [
+          {
+            id: listResponse[0].id,
+            authorId: listResponse[0].authorId,
+            authorName: listResponse[0].username,
+            createdAt: listResponse[0].createdAt.toISOString(),
+            content: listResponse[0].content,
+            title: listResponse[0].title
+          },
+          {
+            id: listResponse[1].id,
+            authorId: listResponse[1].authorId,
+            authorName: listResponse[1].username,
+            createdAt: listResponse[1].createdAt.toISOString(),
+            content: listResponse[1].content,
+            title: listResponse[1].title
+          }
+        ]
       })
       expect(response.body.errors).toBeUndefined()
     })

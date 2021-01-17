@@ -5,6 +5,11 @@ import { GraphQLError } from 'graphql'
 import { SavePostError, SavePostUseCase } from '../../application/save-post'
 import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
 import { PostViewModel } from './PostViewModel'
+import {
+  ListPostsByAuthorIdError,
+  ListPostsByAuthorIdUseCase
+} from '../../application/list-posts-by-author-id'
+import _ from 'lodash'
 
 @InputType()
 export class SavePostInput {
@@ -27,6 +32,7 @@ export class PostResolver {
     private readonly getPostUseCase: GetPostUseCase,
     private readonly savePostUseCase: SavePostUseCase,
     private readonly deletePostUseCase: DeletePostUseCase,
+    private readonly listPostsByAuthorIdUseCase: ListPostsByAuthorIdUseCase,
     private readonly logger: Logger
   ) {
   }
@@ -112,6 +118,31 @@ export class PostResolver {
         switch (error.code) {
           case 'DeletePostError.POST_NOT_FOUND':
             throw new GraphQLError('Post not found')
+        }
+      }
+
+      this.logger.error(error)
+      throw error
+    }
+  }
+
+  @Query(() => [PostViewModel])
+  async listPostsByAuthorId (@Args('authorId') authorId: string): Promise<PostViewModel[]> {
+    try {
+      const responses = await this.listPostsByAuthorIdUseCase.execute({ userId: authorId })
+      return _.map(responses, (response) => ({
+        id: response.id,
+        authorId: response.authorId,
+        authorName: response.username,
+        title: response.title,
+        content: response.content,
+        createdAt: response.createdAt
+      }))
+    } catch (error) {
+      if (error instanceof ListPostsByAuthorIdError) {
+        switch (error.code) {
+          case 'AUTHOR_NOT_FOUND':
+            throw new GraphQLError('Author not found')
         }
       }
 
