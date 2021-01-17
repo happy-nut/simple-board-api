@@ -30,6 +30,8 @@ import { ListCommentsByAuthorIdController } from './presentation/list-comments-b
 import { ListCommentsByAuthorIdUseCase } from './application/list-comments-by-author-id'
 import { ListCommentsByPostIdController } from './presentation/list-comments-by-post-id'
 import { ListCommentsByPostIdUseCase } from './application/list-comments-by-post-id'
+import { DeleteCommentController } from './presentation/delete-comment'
+import { DeleteCommentUseCase } from './application/delete-comment'
 
 @Module({
   imports: [
@@ -47,7 +49,8 @@ import { ListCommentsByPostIdUseCase } from './application/list-comments-by-post
     GetPostController,
     SaveCommentController,
     ListCommentsByAuthorIdController,
-    ListCommentsByPostIdController
+    ListCommentsByPostIdController,
+    DeleteCommentController
   ],
   providers: [
     Logger,
@@ -61,6 +64,7 @@ import { ListCommentsByPostIdUseCase } from './application/list-comments-by-post
     SaveCommentUseCase,
     ListCommentsByAuthorIdUseCase,
     ListCommentsByPostIdUseCase,
+    DeleteCommentUseCase,
     UserResolver,
     {
       provide: USER_REPOSITORY,

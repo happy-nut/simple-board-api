@@ -1,8 +1,9 @@
 import { UseCase } from '../../shared/ddd'
 import _ from 'lodash'
 import { DeleteCommentError } from './DeleteCommentError'
-import { CommentRepository } from '../../domain/CommentRepository'
+import { COMMENT_REPOSITORY, CommentRepository } from '../../domain/CommentRepository'
 import { CommentId } from '../../domain/CommentId'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface DeleteCommentRequest {
   commentId: string
@@ -10,8 +11,10 @@ interface DeleteCommentRequest {
 
 type DeleteCommentResponse = void
 
+@Injectable()
 export class DeleteCommentUseCase implements UseCase<DeleteCommentRequest, DeleteCommentResponse> {
   constructor (
+    @Inject(COMMENT_REPOSITORY)
     private readonly commentRepository: CommentRepository
   ) {
   }
