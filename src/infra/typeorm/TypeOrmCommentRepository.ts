@@ -7,6 +7,7 @@ import { CommentEntityMapper } from './mappers'
 import { CommentId } from '../../domain/CommentId'
 import { Injectable } from '@nestjs/common'
 import { UserId } from '../../domain/UserId'
+import { PostId } from '../../domain/PostId'
 
 @Injectable()
 export class TypeOrmCommentRepository implements CommentRepository {
@@ -31,6 +32,10 @@ export class TypeOrmCommentRepository implements CommentRepository {
       order: { createdAt: 'DESC' }
     })
     return _.map(postEntities, CommentEntityMapper.toDomain)
+  }
+
+  async findAllByPostId (postId: PostId): Promise<Comment[]> {
+    throw new Error('TODO')
   }
 
   async save (comment: Comment): Promise<Comment> {
