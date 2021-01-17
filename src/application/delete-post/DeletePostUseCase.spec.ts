@@ -1,10 +1,10 @@
 import { PostRepository } from '../../domain/PostRepository'
 import { mock, MockProxy } from 'jest-mock-extended'
-import { Post} from '../../domain/Post'
-import { UserId } from '../../domain/UserId'
+import { Post } from '../../domain/Post'
 import { DeletePostUseCase } from './DeletePostUseCase'
 import { DeletePostError } from './DeletePostError'
 import { PostId } from '../../domain/PostId'
+import { createDummyPost } from '../../../test/support/utils'
 
 describe('DeletePostUseCase', () => {
   const POST_ID = 'test-post-id'
@@ -36,20 +36,13 @@ describe('DeletePostUseCase', () => {
   })
 
   it('responds nothing when given repository resolves a post', async () => {
-    const post = Post.create(
-      {
-        title: 'test-title',
-        content: 'test-content',
-        authorId: new UserId('test-author-id'),
-        createdAt: new Date()
-      },
-      new PostId(POST_ID)
-    )
+    const postId = new PostId(POST_ID)
+    const post = createDummyPost({}, postId)
     givenRepositoryFindOneByIdResolvesPost(post)
 
     const response = await uut.execute({ postId: POST_ID })
 
-    expect(postRepository.findOneById).toHaveBeenCalledWith(new PostId(POST_ID))
+    expect(postRepository.findOneById).toHaveBeenCalledWith(postId)
     expect(postRepository.removeOne).toHaveBeenCalledWith(post)
     expect(response).toBeUndefined()
   })
