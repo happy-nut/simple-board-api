@@ -1,10 +1,11 @@
 import { UseCase } from '../../shared/ddd'
-import { CommentRepository } from '../../domain/CommentRepository'
+import { COMMENT_REPOSITORY, CommentRepository } from '../../domain/CommentRepository'
 import _ from 'lodash'
 import { ListCommentsByPostIdError } from './ListCommentsByPostIdError'
-import { PostRepository } from '../../domain/PostRepository'
-import { User, UserRepository } from '../../domain'
+import { POST_REPOSITORY, PostRepository } from '../../domain/PostRepository'
+import { User, USER_REPOSITORY, UserRepository } from '../../domain'
 import { PostId } from '../../domain/PostId'
+import { Inject, Injectable } from '@nestjs/common'
 
 interface ListCommentsByPostIdRequest {
   postId: string
@@ -20,11 +21,15 @@ interface Comment {
 
 export type ListCommentsByPostIdResponse = Comment[]
 
+@Injectable()
 export class ListCommentsByPostIdUseCase
 implements UseCase<ListCommentsByPostIdRequest, ListCommentsByPostIdResponse> {
   constructor (
+    @Inject(POST_REPOSITORY)
     private readonly postRepository: PostRepository,
+    @Inject(COMMENT_REPOSITORY)
     private readonly commentRepository: CommentRepository,
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository
   ) {
   }

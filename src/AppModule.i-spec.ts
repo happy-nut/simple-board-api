@@ -12,6 +12,7 @@ import { ListPostsByAuthorIdController } from './presentation/list-posts-by-auth
 import { GetPostController } from './presentation/get-post'
 import { SaveCommentController } from './presentation/save-comment'
 import { ListCommentsByAuthorIdController } from './presentation/list-comments-by-author-id'
+import { ListCommentsByPostIdController } from './presentation/list-comments-by-post-id'
 
 describe('AppModule', () => {
   let uut: TestingModule
@@ -75,6 +76,11 @@ describe('AppModule', () => {
   it('gets ListCommentsByAuthorIdController', () => {
     expect(uut.get(ListCommentsByAuthorIdController))
       .toBeInstanceOf(ListCommentsByAuthorIdController)
+  })
+
+  it('gets ListCommentsByPostIdController', () => {
+    expect(uut.get(ListCommentsByPostIdController))
+      .toBeInstanceOf(ListCommentsByPostIdController)
   })
 
   it('gets UserResolver', () => {

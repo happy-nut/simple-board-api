@@ -28,6 +28,8 @@ import { SaveCommentUseCase } from './application/save-comment'
 import { COMMENT_REPOSITORY } from './domain/CommentRepository'
 import { ListCommentsByAuthorIdController } from './presentation/list-comments-by-author-id'
 import { ListCommentsByAuthorIdUseCase } from './application/list-comments-by-author-id'
+import { ListCommentsByPostIdController } from './presentation/list-comments-by-post-id'
+import { ListCommentsByPostIdUseCase } from './application/list-comments-by-post-id'
 
 @Module({
   imports: [
@@ -44,7 +46,8 @@ import { ListCommentsByAuthorIdUseCase } from './application/list-comments-by-au
     ListPostsByAuthorIdController,
     GetPostController,
     SaveCommentController,
-    ListCommentsByAuthorIdController
+    ListCommentsByAuthorIdController,
+    ListCommentsByPostIdController
   ],
   providers: [
     Logger,
@@ -57,6 +60,7 @@ import { ListCommentsByAuthorIdUseCase } from './application/list-comments-by-au
     GetPostUseCase,
     SaveCommentUseCase,
     ListCommentsByAuthorIdUseCase,
+    ListCommentsByPostIdUseCase,
     UserResolver,
     {
       provide: USER_REPOSITORY,
