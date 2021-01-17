@@ -1,33 +1,9 @@
-import { Args, Field, InputType, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql'
+import { Args, Field, InputType, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { GetUserError, GetUserUseCase } from '../../application/get-user'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
 import { CreateUserError, CreateUserUseCase } from '../../application/create-user'
-
-interface UserViewModelProps {
-  id: string
-  name: string
-  registeredAt: Date
-}
-
-@ObjectType('User')
-class UserViewModel implements UserViewModelProps {
-
-  @Field()
-  readonly id: string
-
-  @Field()
-  readonly name: string
-
-  @Field(() => Date)
-  readonly registeredAt: Date
-
-  constructor (props: UserViewModelProps) {
-    this.id = props.id
-    this.name = props.name
-    this.registeredAt = props.registeredAt
-  }
-}
+import { UserViewModel } from './UserViewModel'
 
 @InputType()
 export class CreateUserInput {

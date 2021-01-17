@@ -1,49 +1,10 @@
-import { Args, Field, InputType, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql'
+import { Args, Field, InputType, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { GetPostError, GetPostUseCase } from '../../application/get-post'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
 import { SavePostError, SavePostUseCase } from '../../application/save-post'
 import { DeletePostError, DeletePostUseCase } from '../../application/delete-post'
-
-interface PostViewModelProps {
-  id: string
-  authorId: string
-  authorName: string
-  title: string
-  content: string
-  createdAt: Date
-}
-
-@ObjectType('Post')
-class PostViewModel implements PostViewModelProps {
-
-  @Field()
-  readonly id: string
-
-  @Field()
-  readonly authorId: string
-
-  @Field()
-  readonly authorName: string
-
-  @Field()
-  readonly title: string
-
-  @Field()
-  readonly content: string
-
-  @Field(() => Date)
-  readonly createdAt: Date
-
-  constructor (props: PostViewModelProps) {
-    this.id = props.id
-    this.authorId = props.authorId
-    this.authorName = props.authorName
-    this.title = props.title
-    this.content = props.content
-    this.createdAt = props.createdAt
-  }
-}
+import { PostViewModel } from './PostViewModel'
 
 @InputType()
 export class SavePostInput {

@@ -1,48 +1,9 @@
-import { Args, Field, InputType, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql'
+import { Args, Field, InputType, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Logger } from '@nestjs/common'
 import { GraphQLError } from 'graphql'
 import { SaveCommentError, SaveCommentUseCase } from '../../application/save-comment'
 import { DeleteCommentError, DeleteCommentUseCase } from '../../application/delete-comment'
-
-interface CommentViewModelProps {
-  id: string
-  postId?: string
-  authorId?: string
-  authorName?: string
-  content?: string
-  createdAt?: Date
-}
-
-@ObjectType('Comment')
-class CommentViewModel implements CommentViewModelProps {
-
-  @Field()
-  readonly id: string
-
-  @Field({ nullable: true })
-  readonly postId?: string
-
-  @Field({ nullable: true })
-  readonly authorId?: string
-
-  @Field({ nullable: true })
-  readonly authorName?: string
-
-  @Field({ nullable: true })
-  readonly content?: string
-
-  @Field({ nullable: true })
-  readonly createdAt?: Date
-
-  constructor (props: CommentViewModelProps) {
-    this.id = props.id
-    this.postId = props.postId
-    this.authorId = props.authorId
-    this.authorName = props.authorName
-    this.content = props.content
-    this.createdAt = props.createdAt
-  }
-}
+import { CommentViewModel } from './CommentViewModel'
 
 @InputType()
 export class SaveCommentInput {
