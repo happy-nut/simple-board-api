@@ -51,7 +51,7 @@ DB는 RDB/NoSQL 어떤 것을 이용해도 됩니다. firebase처럼 serverless 
 #### GraphQL API
 
 - [x] User CR 가능
-- [ ] Post CRUD 가능
+- [x] Post CRUD 가능
 - [ ] Comment CRUD 가능
 - [ ] 특정 User가 작성한 모든 Post를 조회할 수 있어야 합니다.
 - [ ] 특정 User가 작성한 모든 Comment를 조회할 수 있어야 합니다.
